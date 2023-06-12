@@ -1,0 +1,135 @@
+.THIS .wrapper th {
+    text-align: right !important;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: 5fr 2fr;
+}
+
+.th-header-comp {
+    width: 16.6%;
+}
+.div-header-comp {
+    display: flex;
+    align-items: center;
+    /* justify-content: space-around; */
+}
+.th-header-pipe {
+    font-weight: 300;
+    margin: 0px 8px;
+}
+.input-date {
+    border: 1px solid #d9d7d5;
+    border-radius: 4px;
+    padding: 0.2rem 1.3rem;
+}
+.input-date-error-message {
+    font-size: 10px;
+    color: red;
+}
+
+.boxFacaSim {
+    width: 100%;
+    min-height: 4rem;
+}
+.fontFacaSim {
+    font-size: 20px;
+    margin-left: 3rem;
+    color: #af0303;
+    float: left;
+}
+.columnStyle {
+    /* flex:1; */
+    margin-bottom:4px;
+    align-items: center;
+    display: flex;
+}
+.add-button, .remove-button {
+    padding-bottom: 1px;
+    padding-right: 5px;
+    cursor: pointer;
+}
+.colorIcon {
+    --sds-c-icon-color-foreground-default: white;
+    --sds-c-icon-color-background: red;
+}
+
+.boxTable{
+    margin-bottom: 30px;
+}
+.valorTotalProposta {
+    font-size: 22px;
+}
+
+.header-input { 
+    width: 183px;
+    margin-top: 2px;
+    margin-bottom: 1px;
+    align-items: center;
+    display: flex;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    font-family: var(--dxp-s-body-font-family);
+    font-style: var(--dxp-s-body-font-style);
+    text-transform: var(--dxp-s-body-text-transform);
+    letter-spacing: var(--dxp-s-body-letter-spacing);
+    border-spacing: 0;
+    font-size: inherit;
+    border-collapse: separate;
+    text-align: left;
+    white-space: nowrap;
+    color: #444;
+    font-weight: 700;
+    line-height: normal;
+    box-sizing: border-box;
+    background-color: #f3f3f3;
+    outline: none;
+    justify-content: space-between;
+}
+
+.boxTable {
+    padding: 20px;
+    width: 100%;
+}
+
+.faca-sua-simulacao {
+    padding: 20px;
+    width: 100%;
+    margin: auto;
+}
+
+.comparativo-tabela-proposta {
+    display: flex;
+    margin-top: 15px;
+    margin-left: 15px;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+@media print {
+
+    * {
+        zoom: 87%;
+    }
+
+    @page {
+        /* Chrome sets own margins, we change these printer settings */
+        margin: 0mm 0mm 0mm 0mm;
+        size: landscape;
+    }
+
+    .botao {
+        display: none;
+    }
+
+    .THIS .wrapper {
+        font-size: 0.75rem;
+        grid-template-columns: 4fr 2fr;
+    }
+
+    .column-two {
+        zoom: 120%;
+    }
+}

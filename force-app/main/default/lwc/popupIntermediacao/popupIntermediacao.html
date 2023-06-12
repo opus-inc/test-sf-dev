@@ -1,0 +1,240 @@
+<template>
+    <template if:true={showModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="width: 58rem;max-width: none;">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={viewModal}>
+                        <lightning-icon style="fill: white;" icon-name="utility:close" alternative-text="close"
+                            variant="inverse" size="small">
+                        </lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Intermediação</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-522"
+                    style="overflow:initial">
+                    <template if:true={showToastBar}>
+                        <div class="slds-notify_container">
+                            <div class={outerClass} role="status">
+                                <span class="slds-assistive-text">{type}</span>
+                                <span class={innerClass} title={message}>
+                                    <lightning-icon icon-name={getIconName} alternative-text="icon" styleclass="slds-icon slds-icon_small"
+                                        variant="inverse" size="small"></lightning-icon>
+                                </span>
+                                <div class="slds-notify__content">
+                                    <h2 class="slds-text-heading_small">{message}</h2>
+                                </div>
+                                <div class="slds-notify__close">
+                                    <lightning-button-icon icon-name="utility:close" size="small" variant="border-filled"
+                                        class="slds-button slds-button_icon slds-button_icon-inverse" alternative-text="next"
+                                        onclick={closeModalToast}></lightning-button-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <div style="height:500px;overflow-y: scroll">
+                        <lightning-datatable
+                                key-field="Id"
+                                data={intermediacoes}
+                                columns={columns}
+                                onrowaction={handleRowAction}
+                                hide-checkbox-column
+                        >
+                        </lightning-datatable>
+                    </div>                    
+                </div>
+                <footer class="slds-modal__footer" style="text-align:center">
+                    <lightning-button variant="destructive-text" label="Voltar" style="margin-right:10px;"
+                        onclick={handleVoltar}></lightning-button>
+                    <lightning-button variant="destructive" onclick={handleNewRecord} label="Novo"></lightning-button>
+                </footer>
+                <div if:true={isLoading} class="spinner">
+                    <lightning-spinner alternative-text="Loadinggg" size="medium"></lightning-spinner>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <template if:true={showModalRecord}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-02" aria-modal="true"
+            aria-describedby="modal-content-id-2" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="max-width: 65rem;">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={viewModalRecord}>
+                        <lightning-icon style="fill: white;" icon-name="utility:close" alternative-text="close"
+                            variant="inverse" size="small">
+                        </lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">Intermediação</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-622"
+                style="overflow:initial">
+                        <template if:true={showToastBar}>
+                            <div class="slds-notify_container">
+                                <div class={outerClass} role="status">
+                                    <span class="slds-assistive-text">{type}</span>
+                                    <span class={innerClass} title={message}>
+                                        <lightning-icon icon-name={getIconName} alternative-text="icon" styleclass="slds-icon slds-icon_small"
+                                            variant="inverse" size="small"></lightning-icon>
+                                    </span>
+                                    <div class="slds-notify__content">
+                                        <h2 class="slds-text-heading_small">{message}</h2>
+                                    </div>
+                                    <div class="slds-notify__close">
+                                        <lightning-button-icon icon-name="utility:close" size="small" variant="border-filled"
+                                            class="slds-button slds-button_icon slds-button_icon-inverse" alternative-text="next"
+                                            onclick={closeModalToast}></lightning-button-icon>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                        <div if:true={error} style="font-size: 1rem; color: red;font-weight: 700;">Ocorreu um erro ao tentar salvar o registro. Tente novamente.</div>
+                    <!--template if:true={showRecord}-->
+                        <template if:true={showEdit}>
+                            <div style="height:500px;overflow-y: scroll">
+                                <lightning-combobox name="tipo-intermediacao" label="Tipo de Intermediacao" value={intermediacaoPessoaFisicaValue}
+                                    options={tipoIntermediacaoOptions} onchange={handleTipoIntermediacaoChange}></lightning-combobox>
+
+                            <div if:true={intermediacaoPessoaFisica}>
+                                <h3 style="font-size:1.3rem;">Dados do Corretor</h3>
+                                <div style="display: grid;grid-template-columns: 1fr 1fr;">
+                                    <div style="margin:8px;">
+                                        <lightning-input type="text" value={intermediacao.Name} data-field="Name" placeholder="Nome Completo" required="true"
+                                            label="Nome Completo" onchange={inputHandleChange}></lightning-input>
+                                            <lightning-input type="text" value={intermediacao.CPF_CNPJ__c} required="true"
+                                            data-field="CPF_CNPJ__c" placeholder="CPF" label="CPF"
+                                            onchange={inputHandleChange}></lightning-input>
+                                            <lightning-input type="text" value={intermediacao.CRECI__c}
+                                            data-field="CRECI__c" placeholder="CRECI" label="CRECI"
+                                            onchange={inputHandleChange}></lightning-input>
+                                    </div>
+                                    <div style="margin:8px;">
+                                        <lightning-input type="text" value={intermediacao.Email__c}
+                                        data-field="Email__c" placeholder="E-mail" label="E-mail"
+                                        onchange={inputHandleChange}></lightning-input>
+                                        <lightning-input type="text" required="true" value={intermediacao.Telefone_para_Contato__c}
+                                        data-field="Telefone_para_Contato__c" placeholder="Telefone para Contato" label="Telefone para Contato"
+                                        onchange={inputHandleChange}></lightning-input>     
+                                        <lightning-combobox label="Tipo" placeholder="Tipo" value={intermediacao.Tipo__c} data-field="Tipo__c" options={tipo}
+                                            onchange={inputHandleChange}></lightning-combobox>
+                                    </div>
+                                </div>
+                            </div>
+                            <div if:false={intermediacaoPessoaFisica}>
+                                <h3 style="font-size:1.3rem;">Dados da Empresa</h3>
+                                <div style="display: grid;grid-template-columns: 1fr 1fr;">
+                                    <div style="margin:8px;">
+                                        <lightning-input type="text" required="true" value={intermediacao.Razao_Social__c} data-field="Razao_Social__c" 
+                                            placeholder="Razão Social" label="Razão Social" onchange={inputHandleChange}></lightning-input>
+                                        <lightning-input type="text" value={intermediacao.CPF_CNPJ__c} data-field="CPF_CNPJ__c" placeholder="CNPJ" label="CNPJ" required="true"
+                                            onchange={inputHandleChange}></lightning-input>
+                                        <lightning-input type="text" value={intermediacao.CRECI__c} data-field="CRECI__c" placeholder="CRECI" label="CRECI"
+                                            onchange={inputHandleChange}></lightning-input>
+                                    </div>
+                                    <div style="margin:8px;">
+                                        <lightning-input type="text" value={intermediacao.Email__c} data-field="Email__c" placeholder="E-mail"
+                                            label="E-mail" onchange={inputHandleChange}></lightning-input>
+                                        <lightning-input type="text" required="true" value={intermediacao.Telefone_para_Contato__c}
+                                            data-field="Telefone_para_Contato__c" placeholder="Telefone para Contato" label="Telefone para Contato"
+                                            onchange={inputHandleChange}></lightning-input>
+                                        <lightning-combobox label="Tipo" placeholder="Tipo" value={intermediacao.Tipo__c} data-field="Tipo__c"
+                                            options={tipo} onchange={inputHandleChange}></lightning-combobox>
+                                    </div>
+                                </div>
+                            </div>
+                                <h3 style="font-size:1.3rem;">Comissão</h3>
+                                <div style="display: grid;grid-template-columns: 1fr 1fr;">
+                                    <div style="margin:8px;">
+                                        <lightning-combobox label="Tipo de Comissão" placeholder="Tipo de Comissão" value={intermediacao.Tipo_de_Comissao__c} required="true"
+                                            data-field="Tipo_de_Comissao__c" options={tipoComissao} onchange={inputHandleChange}></lightning-combobox>
+                                        <lightning-input type="number" formatter="percent-fixed" step="0.01" required="true"
+                                            value={intermediacao.Porcentagem__c} data-field="Porcentagem__c" placeholder="%" label="%"
+                                            onchange={inputHandleChange}></lightning-input>
+                                    </div>
+                                    <div style="margin:8px;">
+                                        <lightning-input type="text" value={intermediacao.Observacoes__c} data-field="Observacoes__c" placeholder="Observações"
+                                            label="Observações" onchange={inputHandleChange}></lightning-input>
+                                    </div>
+                                </div>
+                            </div> 
+                        </template>
+                        <template if:false={showEdit}>
+                            <lightning-card title="">
+                                <lightning-button label="Editar" variant="destructive-text" slot="actions"
+                                    onclick={handleOpenEdit}>
+                                </lightning-button>
+                            <div style="padding-left:10px;height:500px;overflow-y: scroll">
+                                <div if:true={intermediacao}>
+                                    <strong style="margin-top: 1px;">Tipo de Intermediação: </strong><span>{intermediacaoPessoaFisicaValueText}</span>
+                                    
+                                    <div if:true={intermediacaoPessoaFisica}>
+                                        <br><h3 style="font-size:1.3rem;">Dados do Corretor</h3>
+                                        <div style="display: grid;grid-template-columns: 1fr 1fr;">
+                                            <div style="margin:8px;">
+                                                <strong style="margin-top: 1px;">Nome Completo: </strong><span>{intermediacao.Name}</span>
+                                                <br><strong style="margin-top: 1px;">CPF: </strong><span>{intermediacao.CPF_CNPJ__c}</span>
+                                                <br><strong style="margin-top: 1px;">CRECI: </strong><span>{intermediacao.CRECI__c}</span>
+                                            </div>
+                                            <div style="margin:8px;">
+                                                <br><strong style="margin-top: 1px;">E-mail: </strong><span>{intermediacao.Email__c}</span>
+                                                <br><strong style="margin-top: 1px;">Telefone para Contato: </strong><span>{intermediacao.Telefone_para_Contato__c}</span>
+                                                <br><strong style="margin-top: 1px;">Tipo: </strong><span>{intermediacao.Tipo__c}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div if:false={intermediacaoPessoaFisica}>
+                                        <br><h3 style="font-size:1.3rem;">Dados da Empresa</h3>
+                                        <div style="display: grid;grid-template-columns: 1fr 1fr;">
+                                            <div style="margin:8px;">
+                                                <strong style="margin-top: 1px;">Razão Social: </strong><span>{intermediacao.Razao_Social__c}</span>
+                                                <br><strong style="margin-top: 1px;">CNPJ: </strong><span>{intermediacao.CPF_CNPJ__c}</span>
+                                                <br><strong style="margin-top: 1px;">CRECI: </strong><span>{intermediacao.CRECI__c}</span>
+                                            </div>
+                                            <div style="margin:8px;">
+                                                <br><strong style="margin-top: 1px;">E-mail: </strong><span>{intermediacao.Email__c}</span>
+                                                <br><strong style="margin-top: 1px;">Telefone para Contato:
+                                                </strong><span>{intermediacao.Telefone_para_Contato__c}</span>
+                                                <br><strong style="margin-top: 1px;">Tipo: </strong><span>{intermediacao.Tipo__c}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <h3 style="font-size:1.3rem;">Comissão</h3>
+                                    <div style="display: grid;grid-template-columns: 1fr 1fr;">
+                                        <div style="margin:8px;">
+                                            <strong style="margin-top: 1px;">Tipo de Comissão: </strong><span>{intermediacao.Tipo_de_Comissao__c}</span>
+                                            <br><strong style="margin-top: 1px;">%: </strong><span>{intermediacao.Porcentagem__c}</span>
+                                            <br><strong >Valor: </strong><span>                                
+                                            <lightning-formatted-number style="margin-top: 1px;" value={intermediacao.Valor__c} format-style="currency" currency-code="BRL"
+                                                maximum-fraction-digits="2"></lightning-formatted-number>
+                                            </span>
+                                        </div>
+                                        <div style="margin:8px;">
+                                            <strong style="margin-top: 1px;">Observacoes: </strong><span>{intermediacao.Observacoes__c}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>                            
+                            </lightning-card>
+                        </template>
+                    <!--/template-->
+                </div>
+                <footer class="slds-modal__footer" style="text-align:center">
+                    <lightning-button variant="destructive-text" label="Voltar" style="margin-right:10px;"
+                        onclick={handleVoltarModalRecord}></lightning-button>
+                    <lightning-button variant="destructive" onclick={handleSaveEdit} label="Salvar"></lightning-button>
+                </footer>
+                <div if:true={isLoading} class="spinner">
+                    <lightning-spinner alternative-text="Loadinggg" size="medium"></lightning-spinner>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

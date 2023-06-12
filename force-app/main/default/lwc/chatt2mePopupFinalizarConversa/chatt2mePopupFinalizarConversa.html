@@ -1,0 +1,21 @@
+<template>
+    <template if:true={showPopupFinalizar}>
+        <div>
+            <div class="cover" onclick={closePopup}></div>
+            <article class="popupBox slds-card">
+                <div class="body">
+                    {label.titleFinalizarConversa}
+                    <lightning-textarea name="finishtext" onchange={handlerChangeText} value={message}>
+                    </lightning-textarea>
+                </div>
+
+                <footer class="popupFooter slds-card__footer">
+                    <lightning-button class="slds-m-right_small" variant="neutral" title={label.cancelLabel}
+                        label={label.cancelLabel} onclick={closePopup}></lightning-button>
+                    <lightning-button class="slds-m-right_small" variant="destructive" title={label.encerrarChat}
+                        label={label.encerrarChat} onclick={sendFinishConversation}></lightning-button>
+                </footer>
+            </article>
+        </div>
+    </template>
+</template>

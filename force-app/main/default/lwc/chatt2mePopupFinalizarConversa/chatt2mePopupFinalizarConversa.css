@@ -1,0 +1,39 @@
+.cover {
+    position: fixed;
+    z-index: 123;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #000;
+    opacity: 0.5;
+}
+.popupBox {
+    z-index: 124;
+    width: 450px;
+    height: 180px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    max-width: 100%;
+    max-height: 100%;
+    overflow: auto;
+}
+.body {
+    padding: 15px;
+    font-size: 15px;
+    text-align: center;
+}
+.popupFooter {
+    background-color: rgb(243, 242, 242);
+    padding: 10px;
+    text-align: right;
+    margin: -12px;
+    margin-right: -16px;
+    margin-left: -16px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}

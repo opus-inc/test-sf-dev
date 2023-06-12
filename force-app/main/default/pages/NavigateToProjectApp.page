@@ -1,0 +1,5 @@
+<apex:page >
+<script>
+    window.location.href="/c/ProjectTaskApp.app"
+</script>
+</apex:page>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+        <target>lightning__RecordPage</target>
+    </targets>
+    <!-- Design Attributes -->
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="hideCheckboxParam" type="Boolean" default="false" label="Hide multiple selection checkbox?" description="Indicate if the grid will show checkbox for select records or not" />
+            <property name="gridIconParam" type="String" label="Indicate the icon for this grid" description="To more information see https://lightningdesignsystem.com/icons/" default="custom:custom19" />
+            <property name="gridTitleParm" type="String" label="Indicate the Grid title" description="Put here the title of your grid" />
+            <property name="sObjectNameParam" type="String" label="Enter API Name of Object" description="You need put the API Object name here, some like: Account or YourObject__c" />
+            <property name="fieldsNamesParam" type="String" label="Enter de fields" description="Each field need to be separeted by comma,  name some like: Field1,Field2,Field3" />
+            <property name="whereParam" type="String" label="Where" description="" default="" />
+            <property name="adicionalConditionsParam" type="String" label="Adicional parameters" description="Here you can put ORDER By or LIMIT if you want" default="" />
+            <property name="actions" type="String" label="Actions buttons" />
+            <property name="identification" type="String" label="Identification Action" />
+            <property name="pagesize" type="Integer" label="How many records do you want display per page" />
+        </targetConfig>
+
+        <targetConfig targets="lightning__RecordPage">
+            <property name="hideCheckboxParam" type="Boolean" default="false" label="Hide multiple selection checkbox?" description="Indicate if the grid will show checkbox for select records or not" />
+            <property name="gridIconParam" type="String" label="Indicate the icon for this grid" description="To more information see https://lightningdesignsystem.com/icons/" default="custom:custom19" />
+            <property name="gridTitleParm" type="String" label="Indicate the Grid title" description="Put here the title of your grid" />
+            <property name="sObjectNameParam" type="String" label="Enter API Name of Object" description="You need put the API Object name here, some like: Account or YourObject__c" />
+            <property name="fieldsNamesParam" type="String" label="Enter de fields" description="Each field need to be separeted by comma,  name some like: Field1,Field2,Field3" />
+            <property name="whereParam" type="String" label="Where" description="" default="" />
+            <property name="adicionalConditionsParam" type="String" label="Adicional parameters" description="Here you can put ORDER By or LIMIT if you want" default="" />
+            <property name="actions" type="String" label="Actions buttons" />
+            <property name="identification" type="String" label="Identification Action" />
+            <property name="pagesize" type="Integer" label="How many records do you want display per page" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

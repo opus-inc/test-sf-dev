@@ -1,0 +1,416 @@
+<apex:page controller="BarcodeController" standardStylesheets="false" applyBodyTag="false" showHeader="false" applyHtmlTag="false" renderAs="pdf">
+    <html charset="UTF-8">
+        <head>
+            <style type="text/css">
+                @page {
+                    margin: 0 0.5cm;
+                    padding: 0 0;
+                    size: a4;
+                }
+
+                body {
+                    font-family: "sans-serif";
+                }
+
+                .document {
+                    margin: auto auto;
+                    background-color: #fff;
+                }
+
+                table {
+                    width: 100%;
+                    position: relative;
+                    border-spacing: 0px;
+                }
+
+                .bankLogo {
+                    width: 20%;
+                    border: 0px;
+                }
+
+                .boletoNumber {
+                    width: 70%;
+                    font-weight: bold;
+                }
+
+                .center {
+                    text-align: center;
+                }
+
+                .right {
+                    text-align: right;
+                    right: 20px;
+                }
+
+                th, td {
+                    position: relative;
+                    border: 0.5px solid black;
+                    padding: 3px 2px 0px 2px;
+                }
+
+                .title {
+                    position: absolute;
+                    left: 3px;
+                    top: 2px;
+                    font-size: 10px;
+                }
+
+                .text {
+                    font-size: 10px;
+                    position: static;
+                    font-weight: bold;
+                }
+
+                p.content {
+                    padding: 0px;
+                    width: 100%;
+                    margin: 0px;
+                    font-size: 10px;
+                }
+
+                .sideBorders {
+                    border-left: 1px solid black;
+                    border-right: 1px solid black;
+                    border-bottom: 0px;
+                    border-top: 0px;
+                }
+
+                .noBorders {
+                    border: 0px;
+                }
+
+                hr {
+                    size: 1;
+                    border: 1px dashed;
+                }
+
+                .marginTop1 {
+                    content: " ";
+                    display: block;
+                    margin: 10px 0;
+                    line-height: 1px;
+                }
+
+                .marginTop2 {
+                    content: " ";
+                    display: block;
+                    margin: 4px 0;
+                    line-height: 1px;
+                }
+
+                .blackbar, .whitebar {
+                    display: inline-block !important;
+                    overflow: hidden !important;
+                    padding: 0 !important;
+                    width: 1.4px !important;
+                    height: 1.3cm !important;
+                }
+                .blackbar {
+                    background-color: black !important;
+                }
+                .whitebar {
+                    background-color: white !important;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="document">
+                <table cellspacing="0" cellpadding="0">
+                    <tr class="topLine">
+                        <td class="bankLogo">
+                            <apex:image url="{!$Resource.LogoItauBoleto}" width="150" height="40"/>
+                        </td>
+                        <td class="sideBorders center"><span style="font-size:20px;font-weight:bold;">341-7</span></td>
+                        <td class="boletoNumber noBorders center"><span><apex:outputLabel value="{!linhaDigitavelMega}"/></span></td>
+                    </tr>
+                </table>
+                <table cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="40%">
+                            <span class="title">Beneficiário</span>
+                            <br class="marginTop1"/>
+                            <span class="text">{!empresaOpusNome}</span>
+                        </td>
+                        <td width="20%">
+                            <span class="title">Agência / Código do Beneficiário</span>
+                            <br class="marginTop1"/>
+                            <span class="text">{!beneficiario}</span>
+                        </td>
+                        <td width="10%">
+                            <span class="title">Espécie</span>
+                            <br class="marginTop1"/>
+                            <span class="text">R$</span>
+                        </td>
+                        <td width="10%">
+                            <span class="title">Quantidade</span>
+                            <br class="marginTop1"/>
+                            <span class="text">&nbsp;</span>
+                        </td>
+                        <td width="20%">
+                            <span class="title">Carteira / Nosso número</span>
+                            <br class="marginTop1"/>
+                            <span class="text">{!carteiraNumero}</span>
+                        </td>
+                    </tr>
+                </table>
+                <table cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td>
+                            <span class="title">Endereço do Beneficiário</span>
+                            <br class="marginTop2"/>
+                            <span class="text">{!empresaOpusEndereco}</span>
+                        </td>
+                    </tr>
+                </table>
+                <table cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="30%">
+                            <span class="title">Número do documento</span>
+                            <br class="marginTop2"/>
+                            <span class="text">{!numeroDocumento}</span>
+                        </td>
+                        <td width="20%">
+                            <span class="title">CPF/CNPJ</span>
+                            <br class="marginTop2"/>
+                            <span class="text">{!empresaOpusCNPJ}</span>
+                        </td>
+                        <td width="20%">
+                            <span class="title">Vencimento</span>
+                            <br class="marginTop2"/>
+                            <span class="text">{!dataVencimento}</span>
+                        </td>
+                        <td width="30%">
+                            <span class="title">Valor documento</span>
+                            <br class="marginTop2"/>
+                            <span class="text">{!valor}</span>
+                        </td>
+                    </tr>
+                </table>
+                <table cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="18%">
+                            <span class="title">(-) Desconto / Abatimentos</span>
+                            <br class="marginTop2"/>
+                            <span class="text">&nbsp;</span>
+                        </td>
+                        <td width="17%">
+                            <span class="title">(-) Outras deduções</span>
+                            <br class="marginTop2"/>
+                            <span class="text">&nbsp;</span>
+                        </td>
+                        <td width="18%">
+                            <span class="title">(+) Mora / Multa</span>
+                            <br class="marginTop2"/>
+                            <span class="text">&nbsp;</span>
+                        </td>
+                        <td width="17%">
+                            <span class="title">(+) Outros acréscimos</span>
+                            <br class="marginTop2"/>
+                            <span class="text">&nbsp;</span>
+                        </td>
+                        <td width="30%">
+                            <span class="title">(=) Valor cobrado</span>
+                            <br class="marginTop2"/>
+                            <span class="text">&nbsp;</span>
+                        </td>
+                    </tr>
+                </table>
+                <table cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="18%">
+                            <span class="title">Pagador</span>
+                            <br class="marginTop2"/>
+                            <span class="text">
+                                {!clienteNome} CPF/CNPJ: {!clienteCNPJ}<br/>
+                                {!clienteEndereco}
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+                <table cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="18%">
+                            <span class="title">Instruções</span>
+                            <br class="marginTop2"/>
+                            <span class="text"><apex:outputText value="{!instrucoes}" escape="false" /></span>
+                        </td>
+                    </tr>
+                </table>
+                <br/>
+                <hr/>
+            </div>
+            <br/>
+            <div class="document">
+                <table cellspacing="0" cellpadding="0">
+                    <tr class="topLine">
+                        <td class="bankLogo">
+                            <apex:image url="{!$Resource.LogoItauBoleto}" width="150" height="40"/>
+                        </td>
+                        <td class="sideBorders center"><span style="font-size:20px;font-weight:bold;">341-7</span></td>
+                        <td class="boletoNumber noBorders center"><span><apex:outputLabel value="{!linhaDigitavelMega}"/></span></td>
+                    </tr>
+                </table>
+                <table cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="70%" colspan="6">
+                            <span class="title">Local de Pagamento</span>
+                            <br class="marginTop2"/>
+                            <span class="text">Até o vencimento, preferencialmente no Itaú. Após o vencimento, somente no ITAÚ</span>
+                        </td>
+                        <td width="30%">
+                            <span class="title">Data de Vencimento</span>
+                            <br class="marginTop2"/>
+                            <p class="content text right">{!dataVencimento}</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="40%" colspan="4">
+                            <span class="title">Beneficiário</span>
+                            <br class="marginTop2"/>
+                            <span class="text">{!empresaOpusNome}</span>
+                        </td>
+                        <td width="30%" colspan="2">
+                            <span class="title">CPF/CNPJ</span>
+                            <br class="marginTop2"/>
+                            <span class="text">{!empresaOpusCNPJ}</span>
+                        </td>
+                        <td width="30%">
+                            <span class="title">Agência/Código Beneficiário</span>
+                            <br class="marginTop2"/>
+                            <p class="content text right">{!beneficiario}</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="15%">
+                            <span class="title">Data do documento</span>
+                            <br class="marginTop2"/>
+                            <span class="text">{!dataDocumento}</span>
+                        </td>
+                        <td width="20%" colspan="2">
+                            <span class="title">Nº do documento</span>
+                            <br class="marginTop2"/>
+                            <span class="text">{!numeroDocumento}</span>
+                        </td>
+                        <td width="10%">
+                            <span class="title">Espécie doc.</span>
+                            <br class="marginTop2"/>
+                            <span class="text">DMI</span>
+                        </td>
+                        <td width="10%">
+                            <span class="title">Aceite</span>
+                            <br class="marginTop2"/>
+                            <span class="text">N</span>
+                        </td>
+                        <td width="15%">
+                            <span class="title">Data processamento</span>
+                            <br class="marginTop2"/>
+                            <span class="text">{!dataProcessamento}</span>
+                        </td>
+                        <td width="30%">
+                            <span class="title">Carteira / Nosso número</span>
+                            <br/>
+                            <p class="content text right">{!carteiraNumero}</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="15%">
+                            <span class="title">Uso do banco</span>
+                            <br class="marginTop2"/>
+                            <span class="text">&nbsp;</span>
+                        </td>
+                        <td width="20%" colspan="2">
+                            <span class="title">Carteira</span>
+                            <br class="marginTop2"/>
+                            <span class="text">{!carteiraNumero}</span>
+                        </td>
+                        <td width="10%">
+                            <span class="title">Espécie</span>
+                            <br class="marginTop2"/>
+                            <span class="text">R$</span>
+                        </td>
+                        <td width="10%">
+                            <span class="title">Quantidade</span>
+                            <br class="marginTop2"/>
+                            <span class="text">&nbsp;</span>
+                        </td>
+                        <td width="15%">
+                            <span class="title">(x) Valor</span>
+                            <br class="marginTop2"/>
+                            <span class="text">&nbsp;</span>
+                        </td>
+                        <td width="30%">
+                            <span class="title">(=) Valor do Documento</span>
+                            <br class="marginTop2"/>
+                            <p class="content text right">{!valor}</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" rowspan="6">
+                            <span class="title">Instruções (Texto de responsabilidade do Beneficiário)</span>
+                            <br class="marginTop2"/>
+                            <span class="text"><apex:outputText value="{!instrucoes}" escape="false" /></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="title">(-) Desconto / Abatimentos</span>
+                            <br class="marginTop2"/>
+                            <p class="content text right">&nbsp;</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="title">(-) Outras deduções</span>
+                            <br class="marginTop2"/>
+                            <p class="content text right">&nbsp;</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="title">(+) Mora / Multa</span>
+                            <br class="marginTop2"/>
+                            <p class="content text right">&nbsp;</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="title">(+) Outros acréscimos</span>
+                            <br class="marginTop2"/>
+                            <p class="content text right">&nbsp;</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="title">(=) Valor cobrado</span>
+                            <br class="marginTop2"/>
+                            <p class="content text right">&nbsp;</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            <span class="title">Pagador</span>
+                            <br class="marginTop2"/>
+                            <span class="text">
+                                {!clienteNome} CPF/CNPJ: {!clienteCNPJ}<br/>
+                                {!clienteEndereco}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="title">Cód. baixa</span>
+                            <br class="marginTop2"/>
+                            <p class="content text right">&nbsp;</p>
+                        </td>
+                    </tr>
+                </table>
+                <br/>
+                <div>
+                    <apex:repeat value="{!barCodeString}" var="bar">
+                        <apex:outputText value="" styleClass="{!if(bar='1','blackbar','whitebar')}" />
+                    </apex:repeat>
+                </div>
+            </div>
+            <br/>
+            <hr/>
+        </body>
+    </html>
+</apex:page>

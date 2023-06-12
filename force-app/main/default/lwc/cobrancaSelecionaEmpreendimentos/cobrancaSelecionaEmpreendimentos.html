@@ -1,0 +1,7 @@
+<template>
+    <template if:true={hasEmpreendimentos}>
+        <lightning-combobox name="select" label="Selecione um empreendimento" value={value}
+            placeholder="" options={empreendimentos} required onchange={handleChange}>
+        </lightning-combobox>
+    </template>
+</template>

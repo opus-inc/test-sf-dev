@@ -1,0 +1,526 @@
+<!-- /**
+ * @author   : Matheus de Castro Sousa
+ * @since    : 2022-03-13
+ * Porpouse  : Estrutura do pdf contrato de Intermediação no Visualforce Page
+ */ -->
+<apex:page standardController="Contrato_opus__c" extensions="IntermediacaoPDFController" showHeader="false" sidebar="false"
+    standardStylesheets="false" renderAs="pdf" applyHtmlTag="false" applyBodyTag="false">
+    <html>
+
+    <head>
+        <style type="text/CSS">
+            @page { size:A4; @bottom-center { content: element(footer) "Página " counter(page) " de " counter(pages) " Identificador Único: {!contratoName}"; } } div.footer { position: running(footer); }
+
+        </style>
+    </head>
+
+    <body>
+        <div class="footer">
+            <table style='font-family:Calibri !important; width: 90%;'>
+                <tr>
+                    <th class="centered padding-baixo" style='border-width: thin; border-style: solid;'>Vendedor 1</th>
+                    <th class="centered padding-baixo" style='border-width: thin; border-style: solid;'>Vendedor 2</th>
+                    <th class="centered padding-baixo" style='border-width: thin; border-style: solid;'>Comprador 1</th>
+                    <th class="centered padding-baixo" style='border-width: thin; border-style: solid;'>Comprador 2</th>
+                    <th class="centered padding-baixo" style='border-width: thin; border-style: solid;'>Testemunha 1</th>
+                    <th class="centered padding-baixo" style='border-width: thin; border-style: solid;'>Testemunha 2</th>
+                </tr>
+            </table>
+        </div>
+
+        <p>
+            <h3 style='font-family:Calibri; text-align: center'>INSTRUMENTO PARTICULAR DE INTERMEDIAÇÃO DO CONTRATO PARTICULAR DE PROMESSA DE COMPRA E VENDA DE UNIDADE IMOBILIÁRIA</h3>
+        </p>
+
+
+        <table style="font-family:Calibri; padding-top:20px">
+            <p>Entre partes, de um lado na qualidade de
+                <b>INTERMEDIADOR</b>, doravante designada
+                <b>CONTRATADO</b>, e de outro lado, na qualidade de
+                <b>INTERMEDIADO</b> doravante designado
+                <b>CONTRATANTE</b>:</p>
+        </table>
+
+        <table style='text-align:left;'>
+            <apex:repeat value="{!proponentes}" var="proponent">
+                <apex:panelGroup rendered="{!If((proponent.Name!=null && proponent.RecordTypeId=='0124A000001IuzJQAS' ),true,false)}">
+
+                    <tbody>
+                        <tr>
+                            <th style='text-align:left;'>
+                                <span id="theFirst">Nome:</span>
+                                <span id="theFirst">{!proponent.Name}</span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style='text-align:left;'>
+                                <span id="theFirst">Nacionalidade:</span>
+                                <span id="theFirst">{!proponent.Nacionalidade__c}</span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style='text-align:left;'>
+                                <span id="theFirst">Estado Civil:</span>
+                                <span id="theFirst">{!proponent.Estado_Civil__c}</span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style='text-align:left;'>
+                                <span id="theFirst">Profissão:</span>
+                                <span id="theFirst">{!proponent.Profissao__c}</span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style='text-align:left;'>
+                                <span id="theFirst">Casado(a) no regime:</span>
+                                <span id="theFirst">{!proponent.Tipo_de_Uniao__c}</span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style='text-align:left;'>
+                                <span id="theFirst">Cédula de Identidade:</span>
+                                <span id="theFirst">{!proponent.RG__c}</span>
+                            </th>
+                            <th style='text-align:left;'>
+                                <span id="theFirst">Orgão Expedidor:</span>
+                                <span id="theFirst">{!proponent.Orgao_Expedidor__c}</span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style='text-align:left;'>
+                                <span id="theFirst">Inscrito(a) no CPF Nº:</span>
+                                <span id="theFirst">{!proponent.CPF__c}</span>
+                            </th>
+                        </tr>
+                        <br/>
+                    </tbody>
+                </apex:panelGroup>
+            </apex:repeat>
+        </table>
+
+        <table style='text-align:left;'>
+            <apex:repeat value="{!proponentes}" var="proponent">
+                <apex:panelGroup rendered="{!If((proponent.Nome_Completo_CJ__c!=null),true,false)}">
+                    <caption style="font-weight: bold;">Qualificação do cônjugue, que aqui também comparece como adquirente:</caption>
+                    <br/>
+                    <tbody>
+                        <tr>
+                            <th style='text-align:left;'>
+                                <span id="theFirst">Nome:</span>
+                                <span id="theFirst">{!proponent.Nome_Completo_CJ__c}</span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style='text-align:left;'>
+                                <span id="theFirst">Estado Civil:</span>
+                                <span id="theFirst">{!proponent.Estado_Civil_CJ__c}</span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style='text-align:left;'>
+                                <span id="theFirst">Profissão:</span>
+                                <span id="theFirst">{!proponent.Profissao_CJ__c}</span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style='text-align:left;'>
+                                <span id="theFirst">Cédula de Identidade:</span>
+                                <span id="theFirst">{!proponent.RG_CJ__c}</span>
+                            </th>
+                            <th style='text-align:left;'>
+                                <span id="theFirst">Orgão Expedidor:</span>
+                                <span id="theFirst">{!proponent.Orgao_Expedidor_CJ__c}</span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style='text-align:left;'>
+                                <span id="theFirst">Inscrito(a) no CPF Nº:</span>
+                                <span id="theFirst">{!proponent.CPF_CJ__c}</span>
+                            </th>
+                        </tr>
+                    </tbody>
+                </apex:panelGroup>
+            </apex:repeat>
+        </table>
+        <br/>
+
+        <table style='text-align:left;'>
+            <apex:repeat value="{!proponentes}" var="proponent">
+                <apex:panelGroup rendered="{!If((proponent.Name!=null && proponent.RecordTypeId=='0124A000001IuzOQAS' ),true,false)}">
+
+                    <tbody>
+                        <tr>
+                            <th style='text-align:left;'>
+                                <span id="theFirst">Nome:</span>
+                                <span id="theFirst">{!proponent.Raz_o_Social__c}</span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style='text-align:left;'>
+                                <span id="theFirst">CNPJ:</span>
+                                <span id="theFirst">{!proponent.CNPJ__c}</span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style='text-align:left;'>
+                                <span id="theFirst">Endereço:</span>
+                                <span id="theFirst">{!proponent.Endereco_Comercial__c}</span>
+                            </th>
+                        </tr>
+                        <br/>
+                    </tbody>
+                </apex:panelGroup>
+            </apex:repeat>
+        </table>
+
+        <table style='text-align:left;'>
+            <apex:repeat value="{!proponentes}" var="proponent">
+                <apex:panelGroup rendered="{!If((proponent.Estado_Civil__c!='Solteiro' && proponent.Estado_Civil__c!='Divorciado' && proponent.Estado_Civil__c!='Solteira' && proponent.Estado_Civil__c!='Divorciada' ),true,false)}">
+                    <apex:panelGroup rendered="{!If((proponent.Nome_Completo_CJ__c==null && proponent.RecordTypeId=='0124A000001IuzJQAS' ),true,false)}">
+                        <caption style="font-weight: bold;">Qualificação do representante legal:</caption>
+                        <tbody>
+                            <tr>
+                                <th style='text-align:left;'>
+                                    <span id="theFirst">Nome:</span>
+                                    <span id="theFirst">{!proponent.Name}</span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style='text-align:left;'>
+                                    <span id="theFirst">Nacionalidade:</span>
+                                    <span id="theFirst">{!proponent.Nacionalidade__c}</span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style='text-align:left;'>
+                                    <span id="theFirst">Estado Civil:</span>
+                                    <span id="theFirst">{!proponent.Estado_Civil__c}</span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style='text-align:left;'>
+                                    <span id="theFirst">Profissão:</span>
+                                    <span id="theFirst">{!proponent.Profissao__c}</span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style='text-align:left;'>
+                                    <span id="theFirst">Casado(a) no regime:</span>
+                                    <span id="theFirst">{!proponent.Tipo_de_Uniao__c}</span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style='text-align:left;'>
+                                    <span id="theFirst">Cédula de Identidade:</span>
+                                    <span id="theFirst">{!proponent.RG__c}</span>
+                                </th>
+                                <th style='text-align:left;'>
+                                    <span id="theFirst">Orgão Expedidor:</span>
+                                    <span id="theFirst">{!proponent.Orgao_Expedidor__c}</span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style='text-align:left;'>
+                                    <span id="theFirst">Inscrito(a) no CPF Nº:</span>
+                                    <span id="theFirst">{!proponent.CPF__c}</span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style='text-align:left;'>
+                                    <span id="theFirst">Endereço:</span>
+                                    <span id="theFirst">{!proponent.Endereco__c}</span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style='text-align:left;'>
+                                    <span id="theFirst">Telefone:</span>
+                                    <span id="theFirst">{!proponent.Telefone_Residencial__c}</span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style='text-align:left;'>
+                                    <span id="theFirst">Telefone Celular:</span>
+                                    <span id="theFirst">{!proponent.Telefone_Celular__c}</span>
+                                </th>
+                            </tr>
+                            <br/>
+                        </tbody>
+                    </apex:panelGroup>
+                </apex:panelGroup>
+
+            </apex:repeat>
+        </table>
+
+        <apex:repeat value="{!proponentes}" var="proponent">
+            <apex:panelGroup rendered="{!If((proponent.Estado_Civil__c!='Casado' ),true,false)}">
+                <b>
+                    <p>Caso o COMPRADOR(A) seja solteiro(a), separado(a), divorciado(a) ou viúvo(a), o mesmo declara expressamente
+                        que, atualmente, não mantém, com qualquer pessoa, relacionamento sob o regime de união estável.</p>
+                </b>
+            </apex:panelGroup>
+        </apex:repeat>
+
+
+        <table style="font-family:Calibri;">
+            <p>Pelo presente INSTRUMENTO PARTICULAR DE INTERMEDIAÇÃO DO CONTRATO PARTICULAR DE PROMESSA DE COMPRA E VENDA DE
+                UNIDADE IMOBILIÁRIA, que reger-se-á pelas cláusulas e condições que mutuamente outorgam, aceitam e se obrigam
+                a cumprir e respeitar, por si, seus herdeiros e sucessores, na forma da Lei, a contratação dos serviços profssionais
+                do
+                <b>CONTRATADO</b> para a aquisição da unidade abaixo descrita, regendo-se nos seguintes termos:</p>
+        </table>
+
+        <table style="font-family:Calibri;">
+            <tr>
+                <th>CLÁUSULA PRIMEIRA:</th>
+                <p>
+                    O(s)
+                    <b>CONTRATANTE(S)</b> por intermédio do
+                    <b>CONTRATADO</b>, prometeu (ram) a adquirir a unidade(s) de noº
+                    <b>
+                        <apex:outputLabel value="{!Contrato_opus__c.Unidade__c}" />
+                    </b>. do Empreendimento denominado
+                    <b>
+                        <apex:outputLabel value="{!Contrato_opus__c.Empreendimento__c}" />
+                    </b>, conforme CONTRATO PARTICULAR DE PROMESSA DE COMPRA E VENDA DE UNIDADE IMOBILIÁRIA, assinado no
+                    mesmo ato deste Instrumento.
+                </p>
+                <p>
+                    <b>
+                        <p>CLÁUSULA SEGUNDA:</p>
+                    </b>
+                    O(s)
+                    <b>CONTRATANTE(S)</b>, em função da intermediação havida para a aquisição da unidade habitacional, pagará
+                    neste ato, ao
+                    <b>CONTRATADO</b>
+                    a quantia de R$
+                    <b>
+                        <apex:outputLabel value="{!convert}" />
+                    </b> do valor total do imóvel, a título de comissão.
+                </p>
+
+                <br/>
+                <br/>
+                <table style='grid-template-columns: 200px 200px;border-width: thin; border-style: solid;'>
+                    <tr>
+                        <th style='border-width: thin; border-style: solid;'>
+                            <span id="theFirst">Nome do Beneficiário</span>
+                        </th>
+                        <th style='border-width: thin; border-style: solid;'>
+                            <span id="theFirst">Valor da Comissão</span>
+                        </th>
+                        <th style='border-width: thin; border-style: solid;'>
+                            <span id="theFirst">Forma de Pagamento</span>
+                        </th>
+                        <th style='border-width: thin; border-style: solid;'>
+                            <span id="theFirst">Cpf/CNPJ</span>
+                        </th>
+                    </tr>
+
+                    <apex:repeat value="{!intermediacao}" var="i">
+                        <apex:panelGroup rendered="{!If((i.Tipo_de_Comissao__c=='Destacado' ),true,false)}">
+                            <tbody>
+                                <tr>
+                                    <apex:panelGroup rendered="{!If((i.Razao_Social__c!=null),true,false)}">
+                                        <th style='border-width: thin; border-style: solid;'>
+                                            <span id="theFirst">{!i.Razao_social__c}</span>
+                                        </th>
+                                    </apex:panelGroup>
+                                    <apex:panelGroup rendered="{!If((i.Razao_Social__c==null),true,false)}">
+                                        <th style='border-width: thin; border-style: solid;'>
+                                            <span id="theFirst">{!i.Name}</span>
+                                        </th>
+                                    </apex:panelGroup>
+
+                                    <th style='border-width: thin; border-style: solid;'>
+                                        <apex:outputText value="{0,number,Currency}">
+                                            R
+                                            <apex:param value="{!i.Valor__c}" />
+                                        </apex:outputText>
+                                    </th>
+
+                                    <apex:panelGroup rendered="{!If((i.Tipo_de_Comissao__c=='Destacado'),true,false)}">
+                                        <th style='border-width: thin; border-style: solid;'>
+                                            <span id="theFirst">À VISTA</span>
+                                        </th>
+                                    </apex:panelGroup>
+                                    <apex:panelGroup rendered="{!If((i.Tipo_de_Comissao__c!='Destacado'),true,false)}">
+                                        <th style='border-width: thin; border-style: solid;'>
+                                            <span id="theFirst">À PRAZO</span>
+                                        </th>
+                                    </apex:panelGroup>
+
+                                    <th style='border-width: thin; border-style: solid;'>
+                                        <span id="theFirst">{!i.CPF_CNPJ__c}</span>
+                                    </th>
+                                </tr>
+                            </tbody>
+                        </apex:panelGroup>
+                    </apex:repeat>
+                </table>
+
+                <p>
+                    <b>
+                        <p>CLÁUSULA TERCEIRA:</p>
+                    </b>
+                    O(s)
+                    <b>CONTRATANTE(S</b>) reconhece(m), expressamente, que por se tratarem de serviços já prestados pelo
+                    <b>CONTRATADO</b> na forma e condições da cláusula segunda, e de acordo com sua própria característca, não
+                    são passíveis de impugnação a qualquer título, e muito menos sujeito a qualquer devolução, ainda que
+                    o CONTRATO PARTICULAR DE PROMESSA DE COMPRA E VENDA DE UNIDADE IMOBILIÁRIA seja rescindido ou não se
+                    efetve, em virtude de arrependimento do(s)
+                    <b>CONTRATANTE(S)</b>, ressalvado o previsto no parágrafo único abaixo.
+                    <p>
+                        <b>PARÁGRAFO ÚNICO:</b>Nos termos do Art. 35-A, inciso VIII e Art. 67-A, parágrafos 10, 11 e 12, da
+                        Lei no 4.591/64, desde que o contrato de venda e compra tenha sido celebrado em estandes de vendas
+                        e fora da sede da Incorporadora, fca ressalvado ao(s)
+                        <b>CONTRATANTE(S</b>) a possibilidade do exercício do direito de arrependimento, durante o prazo improrrogável
+                        de 07 (sete) dias corridos, contados da assinatura deste contrato pelo(s)
+                        <b>CONTRATANTE(S)</b>, com a devolução de todos os valores eventualmente pagos a título de comissão.</p>
+                </p>
+                <p>
+                    <b>
+                        <p>CLÁUSULA QUARTA:</p>
+                    </b>
+                    O presente contrato é celebrado na condição expressa de irrevogabilidade e irretratabilidade, obrigando as partes por si,
+                    seus herdeiros e sucessores a qualquer ttulo.
+                </p>
+                <p>
+                    <b>
+                        <p>CLÁUSULA QUINTA:</p>
+                    </b>
+                    O(s)
+                    <b>CONTRATANTE(S</b>) declara(m), expressamente, que leu(ram) atentamente todas as cláusulas e condições
+                    aqui pactuadas, notadamente a parte do preço e condições de pagamento, estando, portanto, concorde(s)
+                    com a plenitude da avença.
+                    <p>Assim, justas e contratadas, as partes frmam o presente instrumento, na presença de 02 (duas) testemunhas
+                        e em 02 (duas) vias de igual teor e forma, concordando que o foro para a dirimência de quaisquer
+                        dúvidas oriundas do presente será o da comarca desta Capital, preterindo-se outro qualquer mais privilegiado
+                        que seja.</p>
+                </p>
+            </tr>
+        </table>
+
+        <p style='font-family:Calibri; margin-left: 60%;page-break-after:always;'>Goiânia,
+            <b>
+                <apex:outputText value=" {!DAY(TODAY())}" />
+            </b> de
+            <b>
+                <apex:outputText value=" {!CASE(
+                    MONTH( TODAY() ),
+                    1, " Janeiro ",
+                    2, "Fevereiro ",
+                    3, "Março ",
+                    4, "Abril ",
+                    5, "Maio ",
+                    6, "Junho ",
+                    7, "Julho ",
+                    8, "Agosto ",
+                    9, "Setembro ",
+                    10, "Outubro ",
+                    11, "Novembro ",
+                    "Dezembro "
+                  )}" />
+            </b>de
+            <b>
+                <apex:outputText value=" {!YEAR(TODAY())}" />
+            </b>
+        </p>
+
+        <table style="font-family:Calibri !important; padding-left:200px;">
+            <strong>
+                <apex:repeat value="{!proponentes}" var="proponent">
+                    <apex:panelGroup rendered="{!If((proponent.Name!=null &&  proponent.RecordTypeId=='0124A000001IuzJQAS'),true,false)}">
+                        <th style="font-family:Calibri !important; padding-left:200px;">
+                            <br/>
+                            <br/> ________________________________
+                        </th>
+                        <br/>
+                        <th style="font-family:Calibri !important; padding-left:200px;">
+                            {!proponent.Name}</th>
+                    </apex:panelGroup>
+                    <br/>
+                    <apex:panelGroup rendered="{!If((proponent.Nome_Completo_CJ__c!=null &&  proponent.RecordTypeId=='0124A000001IuzJQAS'),true,false)}">
+                        <br/>
+                        <th style="font-family:Calibri !important; padding-left:200px;">
+                            ________________________________</th>
+                        <br/>
+                        <th style="font-family:Calibri !important; padding-left:200px;">
+                            {!proponent.Nome_Completo_CJ__c}</th>
+
+                        <br/>
+                    </apex:panelGroup>
+                    <apex:panelGroup rendered="{!If(( proponent.RecordTypeId=='0124A000001IuzOQAS'),true,false)}">
+                        <br/>
+                        <th style="font-family:Calibri !important; padding-left:200px;">
+                            ________________________________</th>
+                        <br/>
+                        <th style="font-family:Calibri !important; padding-left:200px;">
+                            {!proponent.Raz_o_Social__c}</th>
+
+                        <br/>
+                    </apex:panelGroup>
+                </apex:repeat>
+            </strong>
+        </table>
+
+        <table style="font-family:Calibri !important; padding-left:200px;">
+            <b>
+                <apex:repeat value="{!intermediacao}" var="inter">
+                    <apex:panelGroup rendered="{!If((inter.Razao_Social__c!=null && inter.Tipo_de_Comissao__c=='Destacado'),true,false)}">
+                        <th style="font-family:Calibri !important; padding-left:200px;">
+                            <br/>
+                            <br/> ________________________________
+                        </th>
+                        <br/>
+                        <th style="font-family:Calibri !important; padding-left:200px;">
+                            {!inter.Razao_Social__c}
+                            <br/>CONTRATADA
+                        </th>
+                        <br/>
+                    </apex:panelGroup>
+                    <apex:panelGroup rendered="{!If((inter.Razao_Social__c==null && inter.Tipo_de_Comissao__c=='Destacado'),true,false)}">
+                        <br/>
+                        <th style="font-family:Calibri !important; padding-left:200px;">
+                            ________________________________</th>
+                        <br/>
+                        <th style="font-family:Calibri !important; padding-left:200px;">
+                            {!inter.Name}
+                            <br/>CONTRATADA
+                        </th>
+                        <br/>
+                    </apex:panelGroup>
+                </apex:repeat>
+            </b>
+        </table>
+
+        <b>
+            <p>Testemunhas:</p>
+        </b>
+        <br/>
+        <table style='font-family:Calibri; width: 100%;'>
+            <tr>
+                <th>
+                    <p>
+                        ________________________________
+                        <p>
+                            Nome:
+                            <br/> CPF:
+                        </p>
+                    </p>
+                </th>
+                <th>
+                    <p>
+                        ________________________________
+                        <p>
+                            Nome:
+                            <br/> CPF:
+                        </p>
+                    </p>
+                </th>
+            </tr>
+        </table>
+    </body>
+
+    </html>
+
+</apex:page>

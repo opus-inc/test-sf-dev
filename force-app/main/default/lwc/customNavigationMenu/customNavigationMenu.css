@@ -1,0 +1,13 @@
+@media print {
+
+    * {
+        zoom: 87%;
+    }
+
+    @page {
+        /* Chrome sets own margins, we change these printer settings */
+        margin: 0mm 0mm 0mm 0mm;
+        size: landscape;
+    }
+
+}

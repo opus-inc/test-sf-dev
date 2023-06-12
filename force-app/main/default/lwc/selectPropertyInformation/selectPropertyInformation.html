@@ -1,0 +1,152 @@
+<template>
+    <div title="" style="width: 100%;">
+        <div class="slds-grid slds-gutters">
+
+            <div class="slds-col slds-size_1-of-2">
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col slds-size_2-of-2">
+
+                        <template if:true={empreendimentoImages}>
+                            <div>
+                                <div>
+                                    <template for:each={empreendimentoImages} for:item="image">
+                                        <img key={image.url} src={image.url} class="imgStyle" >
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+
+                        <template if:true={unidadeImages}>
+                            <div>
+                                <div style="height:20rem;">
+                                    <div style="display: inline-block;">
+                                        <template for:each={unidadeImages} for:item="image">
+                                            <img key={image.Id} src={image.url} class="imgStyle">
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <div style="width: 60%;position: relative;">
+                    <lightning-combobox name="empreendimento" label="Selecione o seu empreendimento:"
+                        value={empreendimentoSelectedId} placeholder="Selecione o empreendimento"
+                        options={empreendimentos} onchange={handleChangeEmpreendimento}></lightning-combobox>
+                    
+                    <lightning-combobox if:true={limitarPorTipologia} name="tipologia" label="Selecione a tipologia:" value={tipologiaSelectedId}
+                        placeholder="Selecione a tipologia" options={tipologias} onchange={handleChangeTipologia}>
+                    </lightning-combobox>
+
+                    <!--<c-multi-select-pick-list multi-select="true" onselectoption={handleChangeUnidade} options={unidades}
+                        selected-values={selectedValueList} label="Selecione a unidade:"></c-multi-select-pick-list>-->
+
+                     <lightning-combobox name="unidade" label="Selecione a unidade:" value={lastUnidadeSelected}
+                        placeholder="Selecione a unidade:" options={unidades} onchange={handleChangeUnidade}>
+                    </lightning-combobox> 
+                    <div class="slds-scrollable_y" style="height:5rem;">
+                        <template for:each={unidadesSelected} for:item="unidade">
+                            <div key={unidade.Id} style="float: left;margin-bottom: 5px;">
+                                {unidade.label}
+                            </div>
+
+                            <div key={unidade.Id} style="margin-bottom: 5px;">
+                                <lightning-button-icon icon-name="utility:dash" alternative-text="Remove"
+                                    class="slds-align-bottom removeButton" data-id={unidade.Id} size="small"
+                                    onclick={handleRemoveUnidade}>
+                                </lightning-button-icon>
+                            </div>
+                        </template>
+                    </div> 
+
+                    <!--<c-multi-select-pick-list multi-select="true" onselectoption={handleChangeGaragemCombo} options={garagensCombo}
+                        selected-values={selectedValueListGaragensCombo} label="Selecione a garagem combo:" if:true={hasGaragensCombo}></c-multi-select-pick-list>-->
+
+                     <lightning-combobox if:true={hasGaragensCombo} name="garagem" label="Selecione a garagem combo:" value={lastGaragemComboSelected}
+                        placeholder="Selecione a garagem combo:" options={garagensCombo} onchange={handleChangeGaragemCombo}> 
+                    </lightning-combobox>
+                    <div class="slds-scrollable_y" style="height:5rem;">
+                        <template for:each={garagensComboSelected} for:item="garagem">
+                            <div key={garagem.Id} style="float: left;margin-bottom: 5px;">
+                                {garagem.label}
+                            </div>
+                    
+                            <div key={garagem.Id} style="margin-bottom: 20px;">
+                                <lightning-button-icon icon-name="utility:dash" alternative-text="Remove"
+                                    class="slds-align-bottom removeButton" data-id={garagem.Id} size="small" onclick={handleRemoveGaragemCombo}>
+                                </lightning-button-icon>
+                            </div>
+                        </template>
+                    </div>
+                    
+
+                    <!--<c-multi-select-pick-list multi-select="true" onselectoption={handleChangeGaragem} options={garagens}
+                        selected-values={selectedValueListGaragens} label="Selecione a garagem extra:"></c-multi-select-pick-list>-->
+
+                    <lightning-combobox name="garagem" label="Selecione a garagem extra:" value={lastGaragemSelected}
+                        placeholder="Selecione a garagem extra:" options={garagens} onchange={handleChangeGaragem}>
+                    </lightning-combobox>
+                    <div class="slds-scrollable_y" style="height:5rem;">
+                        <template for:each={garagensSelected} for:item="garagem">
+                            <div key={garagem.Id} style="float: left;margin-bottom: 5px;">
+                                {garagem.label}
+                            </div>
+
+                            <div key={garagem.Id} style="margin-bottom: 20px;">
+                                <lightning-button-icon icon-name="utility:dash" alternative-text="Remove"
+                                    class="slds-align-bottom removeButton" data-id={garagem.Id} size="small"
+                                    onclick={handleRemoveGaragem}>
+                                </lightning-button-icon>
+                            </div>
+                        </template>
+                    </div>
+                    
+
+                    <lightning-combobox if:true={hasAditionalItens} name="item-adicional" label="Selecione os itens adicionais:"
+                        placeholder="Selecione os itens adicionais:" options={filteredItensAdicionais} value={lastItemAdicionalSelected}
+                        onchange={handleChangeItemAdicional}>
+                    </lightning-combobox>
+                    <div if:true={hasAditionalItens} class="slds-scrollable_y" style="height:5rem;">
+                        <template for:each={itensAdicionaisSelected} for:item="itemAdicional">
+                            <div key={itemAdicional.Id} style="float: left;margin-bottom: 5px;">
+                                {itemAdicional.label}
+                            </div>
+                    
+                            <div key={itemAdicional.Id} style="margin-bottom: 20px;">
+                                <lightning-button-icon icon-name="utility:dash" alternative-text="Remove"
+                                    class="slds-align-bottom removeButton" data-id={itemAdicional.Id} size="small"
+                                    onclick={handleRemoveItemAdicional}>
+                                </lightning-button-icon>
+                            </div>
+                        </template>
+                    </div>
+                    
+                </div>
+                <div class="slds-card empreendData">
+                    <div style="margin-left:20px;">
+                        <br><strong>Empreendimento:</strong> {empreendimentoSelected.name}
+                        <br><strong>Unidades:</strong> {unidadesSelectedResumo}
+                        <br><strong>Garagens:</strong> {garagensSelectedResumo} {standardGaragensResumo}
+                        <br><strong>Área Total: </strong> <lightning-formatted-number value={totalArea} maximum-fraction-digits="2"></lightning-formatted-number> m²
+                        <br><strong>Valor Total: </strong> <lightning-formatted-number value={totalProposta} format-style="currency" currency-code="BRL" maximum-fraction-digits="2"></lightning-formatted-number>
+                        <br><br> {infoSelectedResumo}
+                    </div>
+                </div>
+                <div style="width: 60%;position: relative;margin-top:20px;" class="slds-text-align_center">
+                    <button style="width: 49%;" class="slds-button slds-button_text-destructive"
+                        onclick={navigateToPropostas}>Voltar</button>
+                    <button style="width: 49%;" class="slds-button slds-button_destructive" onclick={handleClickSimular}
+                        disabled={disableSaveButton}>Simular Pagamento</button>
+                </div>
+            </div>
+            <div if:true={isLoading} class="spinner">
+                <lightning-spinner alternative-text="Loadingg" size="medium"></lightning-spinner>
+            </div>
+        </div>
+    </div>
+
+</template>

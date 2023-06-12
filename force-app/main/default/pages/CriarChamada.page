@@ -1,0 +1,3 @@
+<apex:page controller="CriarChamadaController" action="{!insereTaskChamadaERedirecUsuario}">
+    
+</apex:page>

@@ -1,0 +1,549 @@
+<apex:page controller="CartaPropostaController" applyBodyTag="false" applyHtmlTag="false" sidebar="false" showHeader="false"
+           renderAs="PDF">
+    
+    <html>
+        
+        <head>
+            <style type="text/css" media="print">
+                @page {
+                padding: 3px;
+                margin: 3px;
+                
+                @top-left {
+                content: element(header);
+                }
+                @bottom-center {
+                width: 100%;
+                content: element(footer);
+                }
+                }
+                
+                div.header {
+                margin-top: 10px;
+                position: running(header);
+                width: 100%;
+                margin-right: 10px;
+                }
+                
+                div.footer {
+                position: running(footer);
+                font-size: 0.75em !important;
+                text-align: center;
+                width: 100%;
+                }
+                
+                p.main {
+                text-align: justify;
+                margin: 0;
+                line-height: 20px;
+                }
+                
+                p.signatures {
+                margin-top: -10px;
+                margin-bottom: -15px;
+                text-align: center;
+                }
+                
+                table.center {
+                margin-left: auto;
+                margin-right: auto;
+                text-align: center;
+                }
+                
+                tr.blank_row {
+                height: 20px;
+                background-color: #FFFFFF;
+                }
+                
+                .cabecalho {
+                background-color: #000080;
+                text-align: center;
+                height: 35px;
+                }
+                
+                .subTitulo {
+                background-color: #000080;
+                text-align: center;
+                height: 25px;
+                margin-top: 0px;
+                }
+                
+                h2,
+                h3 {
+                color: white;
+                padding: 2px 0;
+                }
+                
+                table,
+                th,
+                td {
+                border: 1px solid black;
+                border-collapse: collapse;
+                }
+                
+                th,
+                td {
+                padding: 5px;
+                text-align: left;
+                font-size: 10px;
+                
+                }
+                
+                th {
+                width: 4px
+                }
+                
+                td {
+                width: 39px
+                }
+                
+                .small {
+                font-size: 10px;
+                
+                }
+                
+                ol {
+                padding-left: 0;
+                padding-top: 1px;
+                list-style-position: inside;
+                margin-left: 0px;
+                margin-top: 1px;
+                }
+                
+                #conjugue {
+                text-align: center;
+                font-weight: bold;
+                font-size: 12px;
+                }
+                
+                .noBorder {
+                border-style: none;
+                }
+                
+                .centered {
+                text-align: center;
+                align-items: center;
+                justify-content: center;
+                }
+                
+                .padding-baixo {
+                padding-bottom: 20px;
+                }
+                
+                #holder {
+                min-height: 100%;
+                position: relative;
+                }
+                
+                #body {
+                padding-bottom: 100px;
+                /* height of footer */
+                }
+                
+                footer {
+                width: 100%;
+                position: unset;
+                left: 0;
+                bottom: 0;
+                }
+            </style>
+            
+        </head>
+        
+        <body style="font-size: 1.00em !important; font-family: Calibri !important; color: #181818;">
+            
+            <div id="holder">
+                <header>
+                    <div class='cabecalho'>
+                        <h2>CARTA PROPOSTA -&nbsp;
+                            <apex:outputText value="{!propostaDeVendas.Nome_do_Empreendimento__c}"></apex:outputText>
+                        </h2>
+                    </div>
+                </header>
+                <div id="body">
+                    <div>
+                        <div style="margin-bottom: 0px">
+                            <h4 style="margin-left: 10%; font-weight: normal;margin-bottom:0px ">
+                                À
+                                <span style="text-decoration: underline; font-weight: bold"> SPE INCORPORAÇÃO OPUS BUENO 1 LTDA</span>
+                            </h4>
+                            <p style="font-size: 9.5px; margin-left:10%; margin-top: 0px; margin-bottom:2px">
+                                Através desta o(s) Proponete(s) abaixo qualificado(s), formaliza(m) uma proposta para aquisição do objeto descrito cujos
+                                termos e confições seguem para a
+                            </p>
+                            <p style="font-size: 9.5px; margin-top: 2px;">
+                                avaliação do Vendendor.
+                            </p>
+                        </div>
+                        <div class='subTitulo'>
+                            <h3 style="padding: 2px 0">DADOS DOS PROPONENTES</h3>
+                        </div>
+                        <apex:pageBlock rendered="true">
+                            <table style="width: 98%">
+                                <apex:repeat value="{!proponentesList}" var="prop">
+                                    
+                                    <tr>
+                                        <th>Nome </th>
+                                        <td class="tabela.dados">{!prop.Name}</td>
+                                        <th>Data de Nascimento</th>
+                                        <td>
+                                            <apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+                                                <apex:param value="{!prop.Data_de_Nascimento__c}" />
+                                            </apex:outputText>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Estado Civil:</th>
+                                        <td>{!prop.Estado_Civil__c} {!prop.Tipo_de_Uniao__c}</td>
+                                        <th>RG / Orgão Emissor</th>
+                                        <td>{!prop.RG__c} {!prop.Orgao_Expedidor__c}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Endereço</th>
+                                        <td>{!prop.Endereco_Residencial__c}</td>
+                                        <th>CPF Nº</th>
+                                        <td>{!prop.CPF__c}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Email</th>
+                                        <td>{!prop.E_mail__c}</td>
+                                        <th>Profissão</th>
+                                        <td>{!prop.Profissao__c}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Telefone:</th>
+                                        <td>{!prop.Telefone_Residencial__c}</td>
+                                        <th>Tel Celular</th>
+                                        <td>{!prop.Telefone_Celular__c}</td>
+                                    </tr>
+                                    <apex:outputText rendered="{!if(prop.Nome_Completo_CJ__c != '', true ,false)}">
+                                        <tr>
+                                            <td colspan="4" id="conjugue">Cônjuge</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Nome </th>
+                                            <td class="tabela.dados">{!prop.Nome_Completo_CJ__c}</td>
+                                            <th>Data de Nascimento</th>
+                                            <td>
+                                                <apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+                                                    <apex:param value="{!prop.Data_de_Nascimento_CJ__c}" />
+                                                </apex:outputText>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Estado Civil:</th>
+                                            <td>{!prop.Estado_Civil_CJ__c} {!prop.Tipo_de_Uniao_CJ__c}</td>
+                                            <th>RG / Orgão Emissor</th>
+                                            <td>{!prop.RG_CJ__c} {!prop.Orgao_Expedidor_CJ__c}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Endereço</th>
+                                            <td>{!prop.Endereco_Residencial_CJ__c}</td>
+                                            <th>CPF Nº</th>
+                                            <td>{!prop.CPF_CJ__c}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Email</th>
+                                            <td>{!prop.E_mail_CJ__c}</td>
+                                            <th>Profissão</th>
+                                            <td>{!prop.Profissao_CJ__c}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Telefone:</th>
+                                            <td>{!prop.Telefone_CJ__c}</td>
+                                            <th>Tel Celular</th>
+                                            <td>{!prop.Celular_CJ__c}</td>
+                                        </tr>
+                                        <tr>
+                                            <th style="border: none; height: 25px"></th>
+                                        </tr>
+                                    </apex:outputText>
+                                </apex:repeat>
+                            </table>
+                        </apex:pageBlock>
+                        <div class='subTitulo'>
+                            <h3 style="padding: 2px 0">OBJETO DA PROPOSTA</h3>
+                        </div>
+                        <table style="width: 100%">
+                            <tr>
+                                <th>Empreendimento</th>
+                                <td>
+                                    <apex:outputText value="{!propostaDeVendas.Nome_do_Empreendimento__c}"></apex:outputText>
+                                </td>
+                                <th>Torre</th>
+                                <td>
+                                    <apex:outputText value="{!propostaDeVendas.Unidade__r.Nome_do_bloco__c}"></apex:outputText>
+                                </td>
+                                <th>Unidade</th>
+                                <td>
+                                    <apex:outputText value="{!propostaDeVendas.Unidade__r.Name}"></apex:outputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="border:none"></th>
+                                <td style="border:none"></td>
+                                <th>Valor da Unidade</th>
+                                <td>
+                                    <apex:outputText value="R$ {!valorTotalProposta}"></apex:outputText>
+                                </td>
+                                <th>Vagas de Garagem</th>
+                                <td>
+                                    <apex:outputText value="{!propostaDeVendas.Garagem__c}"></apex:outputText>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class='subTitulo'>
+                            <h3 style="padding: 2px 0">PREÇO E FORMA DE PAGAMENTO</h3>
+                        </div>
+                        <table style="width: 100%">
+                            <tr style="text-align: 100%">
+                                <th style="text-align: center; vertical-align: middle; width: 10%">Nº Parcelas</th>
+                                <th style="text-align: center; vertical-align: middle; width: 18%">Periodicidade</th>
+                                <th style="text-align: center; vertical-align: middle; width: 18%">Data do 1o Vencimento</th>
+                                <th style="text-align: center; vertical-align: middle; width: 18%">Valor Unitário Nesta data</th>
+                                <th style="text-align: center; vertical-align: middle; width: 18%">Valor Total da Série</th>
+                                <th style="text-align: center; vertical-align: middle; width: 18%">Atualização Monetária</th>
+                            </tr>
+                            <!--
+<apex:repeat value="{!condicaoPagamento}" var="cond" rendered="true">
+<tr>
+<td style="text-align: center; vertical-align: middle; width: 10%">{!cond.Quantidade_de_parcelas__c}</td>
+<apex:outputText rendered=" IF ({!cond.Periodicidade_Condicao__c} != 'Financiamento')">
+
+</apex:outputText>
+<td style="text-align: center; vertical-align: middle; width: 18%">Mensal</td>
+<td style="text-align: center; vertical-align: middle; width: 18%">
+<apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+<apex:param value="{!cond.In_cio_do_Vencimento__c}" /></apex:outputText>
+</td>
+<td style="text-align: center; vertical-align: middle; width: 18%" id="valor">{!cond.Valor_Total_das_Parcelas__c}</td>
+<td style="text-align: center; vertical-align: middle; width: 18%" id="valor">{!cond.Valor_Total_das_Parcelas__c * cond.Quantidade_de_parcelas__c }</td>
+<td style="text-align: center; vertical-align: middle; width: 18%">{!cond.Correcao__c}</td>
+</tr>
+</apex:repeat>
+-->
+                            <apex:repeat value="{!condDto}" var="cond" rendered="true">
+                                <tr>
+                                    <td style="text-align: center; vertical-align: middle; width: 10%">{!cond.quantidadeDeParcelas}</td>
+                                    <apex:outputText rendered=" IF ({!cond.periodicidade} != 'Financiamento')">
+                                        
+                                    </apex:outputText>
+                                    <td style="text-align: center; vertical-align: middle; width: 18%">Mensal</td>
+                                    <td style="text-align: center; vertical-align: middle; width: 18%">
+                                        <apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+                                            <apex:param value="{!cond.inicioDoVencimento}" /></apex:outputText>
+                                    </td>
+                                    <td style="text-align: center; vertical-align: middle; width: 18%" id="valor">{!cond.valorTotalDasParcelasFormatado}</td>
+                                    <td style="text-align: center; vertical-align: middle; width: 18%" id="valor">{!cond.valorTotalDaSerieFormatado }</td>
+                                    <td style="text-align: center; vertical-align: middle; width: 18%">{!cond.correcao}</td>
+                                    
+                                </tr>
+                            </apex:repeat>
+                            <tr style=" background-color: #f1f1f1">
+                                <td colspan="4" style="text-align: right; margin-right: 5%">
+                                    <span style="font-size: 13px; font-style:bold">Total</span>
+                                </td>
+                                <td colspan="2">
+                                    <span style="font-size: 13px; font-style:bold">R$ {!valorTotalParcelas} </span>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <table style="width: 100%">
+                            <tr>
+                                <td style="text-align: center; vertical-align: middle; width: 10%">1</td>
+                                <td style="text-align: center; vertical-align: middle; width: 18%">Financiamento</td>
+                                <td style="text-align: center; vertical-align: middle; width: 18%">
+                                    <apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+                                        <apex:param value="{!financiamentoInicioVencimento}" /></apex:outputText>
+                                </td>
+                                <td style="text-align: center; vertical-align: middle; width: 18%" id="valor">R$ {!financiamentoUnitarioFormatado}</td>
+                                <td style="text-align: center; vertical-align: middle; width: 18%" id="valor">R$ {!financiamentoUnitarioFormatado}</td>
+                                <td style="text-align: center; vertical-align: middle; width: 18%">Reajustáveis</td>
+                            </tr>
+                            <tr style=" background-color: #f1f1f1; ">
+                                <td colspan="4" style="text-align: right; margin-right: 5%">
+                                    <span style="font-size: 13px; font-style:bold">Total</span>
+                                </td>
+                                <td colspan="2">
+                                    <span style="font-size: 13px; font-style:bold">R$ {!financiamentoUnitarioFormatado} </span>
+                                </td>
+                            </tr>
+                            <tr style=" background-color: #f1f1f1; ">
+                                <td colspan="4" style="text-align: right; margin-right: 5%">
+                                    <span style="font-size: 13px; font-style:bold">Total da proposta nesta data</span>
+                                </td>
+                                <td colspan="2">
+                                    <span style="font-size: 13px; font-style:bold">R$ {!valorTotalProposta} </span>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class='subTitulo' style="padding-botton: 0px;">
+                            <h3 style="padding: 2px 0">ATUALIZAÇÃO MONETÁRIA</h3>
+                        </div>
+                        <ol>
+                            <li class="small">A partir desta data, até a data prevista para entrega do empreendimento, os valores serão reajustados
+                                pelo INCC (Índice Nacional da Construção Civil), publicado pela Fundação Getúlio Vargas, exeto
+                                as parcelas fixas.
+                            </li>
+                            <li class="small">A partir da data prevista para entrega do empreendimento, até a quitação final, os valores serão
+                                reajustados mensalmente pelo IGP-M (Índice Geral de Preços de Mercado), divulgado pela Fundação
+                                Getúlio Vargas, acrescida de juros de 12% ao ano, calculado pelo Sistema Price de Amortização.
+                            </li>
+                        </ol>
+                        <div class='subTitulo'>
+                            <h3 style="padding: 2px 0">CONSIDERAÇÕES GERAIS</h3>
+                        </div>
+                        <p class="small">Declaro que tenho conhecimento integral sobre as as condições pertinentes a esta proposta, tais como;</p>
+                        <ol>
+                            <li class="small">Esta proposta será analisada pelo VENDEDOR que poderá recusa-la, ainda que imotivadamente.</li>
+                            <li class="small">Aprovada a proposta, ocasião em que será irretratável, será(ão) apresentado(s) o(s) cheque(s) referente
+                                ao sinal de negocio e o vencimento as parcelas independe da assinatura do contrato particular
+                                de compra e venda.
+                            </li>
+                            <li class="small">O(s) Proponente(s) se compremete(m) em comparecer no prazo máximo de 48 horas, após a convocação
+                                do VENDEDOR, para firmar o contrato particular. Não atendida a convocação no prazo estipulado,
+                                esta proposta poderá ser cancelada e o(s) Proponente(s) perderá(m) o sinal dado.
+                            </li>
+                            <li class="small">
+                                A concessão do Financiamento, na ocasião da entrega do empreendimento, está sujeita a análise junto as agencias de proteção
+                                de crédito (não poderá existir restrições em nome do(s) proponente(s)), ao pagamento pontual
+                                (ou seja, sem atrasos em nenhuma parcela) e ao cumprimento da condição de pagamento descrita
+                                nesta proposta (não poderá haver repactuações nas condições de pagamento)
+                            </li>
+                            <li class="small">
+                                Em caso de recusa dessa proposta, ou ainda, em caso de devolução do(s) cheque(s) de sinal, essa proposta perderá qualquer
+                                eficácia juridica, ficando o bem totalmente liberado para comercialização.
+                            </li>
+                        </ol>
+                        <div class='subTitulo'>
+                            <h3 style="padding: 2px 0">DADOS INTERMEDIAÇÃO</h3>
+                        </div>
+                        <table style="width: 100%">
+                            <tr>
+                                <th>Corretor</th>
+                                <th>Gerente</th>
+                                <th>Gerente Mercado</th>
+                                <th>Empresa Vendas</th>
+                            </tr>
+                            <tr>
+                                <td> {!propostaDeVendas.Nome_do_Corretor__c}</td>
+                                <td> {!propostaDeVendas.Gerente__c}</td>
+                                <td></td>
+                                <td>{!propostaDeVendas.Corretor__r.Imobiliaria__c}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class='subTitulo'>
+                        <h3 style="padding: 2px 0">SERVIÇOS DE INTERMEDIAÇÃO E FORMA DE PAGAMENTO</h3>
+                    </div>
+                    <p class="small">Declaro que tenho conhecimento integral sobre as as condições pertinentes a esta proposta, tais como;</p>
+                    <ol>
+                        <li class="small">
+                            Vindo à mesma ser aprovada e aceita pela incorporadora, pagarei ao(s) intermediador(es) pelos serviços os valor(es) abaixo
+                            descriminado(s).
+                        </li>
+                        <li class="small">
+                            Em caso de recusa ou não aceitação da proposta, o intermediador assume a responsabilidade em proceder à devolução do(s) valor(es)
+                            ou cheque(s) relativo(s) a remuneração dos serviços de intermediação, sem qualquer espécie de despesas.
+                        </li>
+                        <li class="small">
+                            Sendo aceita da proposta e formalizado o compromisso de compra e venda, o Proponente reconhece que os serviços do intermediador
+                            foram prestados e não são passiveis de impugnação a qualquer título e muito menos sujeito a qualquer
+                            devolução
+                        </li>
+                        <li class="small">
+                            As demais condições sobre a prestação de serviços de intermediação, foram acordadas com o intermediador(es), ficando o Vendedor
+                            insento da responsabilidade sobre estes serviços.
+                        </li>
+                    </ol>
+                    <table style="width: 100%">
+                        <tr>
+                            <th style='width: 10%'>
+                                Creci
+                            </th>
+                            <th style='width: 30%'>
+                                Intermediador(es)
+                            </th>
+                            <th style='width: 15%'>
+                                Valor dos Honorários
+                            </th>
+                            <th style='width: 12%'>
+                                Telefone
+                            </th>
+                            <th style='width: 33%'>
+                                Observações
+                            </th>
+                        </tr>
+                        <apex:repeat value="{!intermediacoesDTO}" var="inter" rendered="true">
+                            <tr>
+                                <td style='width: 10%'>
+                                    {!inter.creci}
+                                </td>
+                                <td style='width: 30%'>
+                                    {!inter.nomeIntermediador}
+                                </td>
+                                <td style='width: 15%'>
+                                    {!inter.valorDosHonorarios}
+                                </td>
+                                <td style='width: 12%'>
+                                    {!inter.telefone}
+                                </td>
+                                <td style='width: 33%'>
+                                    {!inter.observacoes}
+                                </td>
+                            </tr>
+                        </apex:repeat>
+                        <tr>
+                                <td class="noBorder"></td>
+                                <td class="noBorder" style="text-align: right;"> Total dos serviços de Intermediação</td>
+                                <td> R$: {!valorIntermediacoesString}</td>
+                                <td class="noBorder"></td>
+                                <td class="noBorder"></td>
+                        </tr>
+                    </table>
+                    <div class='subTitulo'>
+                        <h3 style="padding: 2px 0">PREÇO TOTAL DA PROPOSTA + SERVIÇOS DE INTERMEDIAÇÃO</h3>
+                    </div>
+                    <p class="centered" style="font-weight: bold">
+                        TOTAL NESTA DATA (Proposta + Intermediação)
+                        <span style="border: solid 1px #000; text-align: right; display: inline-block; width: 135px; color: red; font-weight: bold">R$ {!totalProposta_servicosDeIntermediacao}</span>
+                    </p>
+                    <div class='subTitulo'>
+                        <h3 style="padding: 2px 0">LOCAL, DATA e ASSINATURA</h3>
+                    </div>
+                    <table style='width: 100%'>
+                        <tr>
+                            <th class='noBorder centered'>Local:</th>
+                            <th class='noBorder centered'>Data:</th>
+                            <th class='noBorder centered'>Assinatura do(s) Proponente(s):</th>
+                            <th class='noBorder centered'>Assinatura do(s) Intermediador(es):</th>
+                        </tr>
+                        <tr style="height: 25px;">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                    <br/>
+                </div>
+            </div>
+            <footer>
+                <div class="final-pagina">
+                    <table style='width: 100%'>
+                        <tr>
+                            <th class="centered padding-baixo">Vendedor 1</th>
+                            <th class="centered padding-baixo">Vendedor 2</th>
+                            <th class="centered padding-baixo">Comprador 1</th>
+                            <th class="centered padding-baixo">Comprador 2</th>
+                            <th class="centered padding-baixo">Testemunha 1</th>
+                            <th class="centered padding-baixo">Testemunha 2</th>
+                        </tr>
+                    </table>
+                </div>
+            </footer>
+        </body>
+        
+    </html>
+</apex:page>

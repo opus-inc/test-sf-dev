@@ -1,0 +1,143 @@
+<apex:page controller="ChecklistController" 
+           applyBodyTag="false" 
+           applyHtmlTag="false" 
+           sidebar="false" 
+           showHeader="false"
+           renderAs="PDF">
+    
+    <html>
+        <head>
+            <style type="text/css" media="print">
+               @page {
+                padding:20px;
+                margin-bottom: 90px;
+                
+                @top-left {
+                content: element(header);
+                }
+                @bottom-center {
+                width: 100%;
+                content: element(footer);
+                }
+                }
+                div.header {
+                margin-top:10px;
+                position: running(header);
+                width: 100%;
+                margin-right: 10px;
+                }
+                div.footer {
+                position: running(footer);
+                font-size: 0.75em !important;
+                text-align: center;
+                width: 100%;
+                }
+                p.main {
+                text-align: justify;
+                margin : 0;
+                line-height : 20px;
+                }
+                p.signatures{
+                margin-top: -10px;
+                margin-bottom: -15px;
+                text-align: center;
+                }
+                table.center{
+                margin-left: auto;
+                margin-right: auto;
+                text-align: center;
+                }
+                tr.blank_row{
+                height: 20px;
+                background-color: #FFFFFF;
+                }
+            </style>
+        </head>
+        
+        <body style="font-size: 1.00em !important; font-family: Calibri !important; color: #181818;">
+            <div class="footer">
+                <hr/>
+                Opus Inc.<br/>
+                Av. T-10, Número 208 - St. Bueno, Goiânia - GO, 74223-060<br/>
+                Telefone: (62)3250-0400 | Site: www.opus.inc 
+            </div>
+            
+        <b>Prezado Cliente,</b>
+        <br/><br/>
+            <p class="main">
+                Gostaríamos de dar as boas-vindas e parabenizar a aquisição de um imóvel <b>OPUS</b>. É um prazer tê-lo
+                como nosso cliente.</p><br/>
+            <p class="main">
+                Este documento tem como finalidade verificar se todos os itens do presente contrato foram esclarecidos ao
+                COMPRADOR no momento da venda da unidade <b><u><apex:outputText value="{!PropostaVendas.Nome_Unidade__c}"></apex:outputText></u></b>
+                do empreendimento <b><apex:outputText value="{!PropostaVendas.Nome_do_Empreendimento__c}"></apex:outputText></b>.
+            </p><br/>
+            <p class="main">
+        1. Data prevista para o término das obras, com as ressalvas contratuais. <b>( )</b>
+            </p>
+            <p class="main">
+        2. Forma ajustada no contrato para incidência da atualização monetária, dos juros contratados e
+        sistema de amortização. <b>( )</b>
+            </p>
+            <p class="main">
+        3. No caso de <b>não recebimento dos boletos</b> de cobrança até 5 (cinco) dias antes do vencimento,
+        entrar em contato com a Central de Relacionamento com o Cliente, ou retirar o boleto através do
+        Portal do Cliente no Site OPUS. <b>( )</b>
+            </p>
+            <p class="main">
+        4. Quanto ao processo de personalização onde deverão ser consultados os prazos informados pela
+        OPUS para a viabilidade das modificações. <b>( )</b>
+            </p>
+            <p class="main">
+        5. Caso opte pelo financiamento bancário do saldo com vencimento após a emissão do habite-se,
+        será de obrigatoriedade do <b>COMPRADOR</b> todo o processo de contratação junto ao banco,
+        especialmente no que se refere à obtenção dos documentos que venham ser exigidos pela instituição
+        financeira e a entrega das chaves será feita após a quitação do imóvel junto à incorporadora. <b>( )</b>
+            </p>
+            <p class="main">
+        6. <b>Garantias previstas</b>, no instrumento de compra e venda, visando o recebimento das chaves que
+        está vinculado à escrituração e registro da unidade junto ao Registro de Imóveis competente,
+        independente se a unidade estiver quitada, ou em financiamento. <b>( )</b>
+            </p>
+            <p class="main">
+        7. O valor do condomínio e o pagamento do IPTU, bem como das demais taxas públicas é de
+        responsabilidade do adquirente desde a data da instalação do condomínio, independente do
+        recebimento das chaves da unidade, ou da data de assinatura do contrato de compra e venda,
+        valendo sempre o que ocorrer por último. <b>( )</b>
+            </p>
+            <p class="main">
+        8. Solicitamos a gentileza do não preenchimento da data de assinatura do contrato pelo cliente. A
+        data será preenchida no ato do recebimento do Contrato de Compras e Vendas pela Secretaria de
+        Vendas da <b>OPUS INCORPORADORA</b>, momento em que os lançamentos sistêmicos também serão
+        gerados. <b>( )</b>
+            </p><br/>
+            <p class="main">
+        Por fim, gostaríamos de informar que, <u>para quaisquer esclarecimentos</u>, o(a) senhor(a) deverá entrar
+        em contato com a nossa <b>Central de Relacionamento com o cliente</b>, através do telefone: (062) 3250-
+        0400 e/ou site OPUS: <a id="https://www.opusic.com.br" name="OpusInc" href="https://www.opusic.com.br">www.opusic.com.br</a>
+            </p><br/>
+        <b>Declaro que todos os itens acima mencionados foram observados e esclarecidos.</b> <br/><br/><br/>
+            <p class="signatures">
+                <table class="center">
+                <apex:repeat value="{!ProponenteProposta}" var="prop" rendered="true">
+                    <tr>
+                        <td>__________________________________________</td>
+                    </tr>
+                    <tr>
+                        <td>{!prop.Name}</td>
+                    </tr>
+                    <tr class="blank_row">
+                        <td colspan="3"></td>
+                    </tr>
+                    <tr style="display:{!IF(ISBLANK(prop.Nome_Completo_CJ__c),'none','table-row')}">
+                            <td>__________________________________________</td>
+                    </tr>
+                    <tr style="display:{!IF(ISBLANK(prop.Nome_Completo_CJ__c),'none','table-row')}">
+                            <td><apex:outputText value=" {!prop.Nome_Completo_CJ__c}"/></td>
+                    </tr>
+                </apex:repeat>
+                </table>
+            </p>
+        </body>     
+    </html>
+</apex:page>

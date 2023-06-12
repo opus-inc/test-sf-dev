@@ -1,0 +1,48 @@
+<apex:page controller="BarcodeController" applyBodyTag="false">
+
+    <head>
+        <apex:includeScript value="{!URLFOR($Resource.JsBarcode, '')}" />
+        <apex:includeScript value="{!URLFOR($Resource.html2canvas, '')}" />
+        <script>
+            function generateBarcode() {
+                var barcodeData = '{!barcodeData}';
+                var svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                JsBarcode(svgElement, barcodeData, {
+                    format: "CODE128",
+                    displayValue: true,
+                    fontSize: 16,
+                    height: 50,
+                    width: 2,
+                    margin: 10
+                });
+                document.body.appendChild(svgElement);
+                html2canvas(svgElement).then(function (canvas) {
+                    document.body.removeChild(svgElement);
+                    var dataUrl = canvas.toDataURL();
+                    document.getElementById('barcodeImage').src = dataUrl;
+                    saveBarcodeAsPdf(dataUrl);
+                });
+            }
+
+            function saveBarcodeAsPdf(dataUrl) {
+                var form = document.createElement('form');
+                form.method = 'post';
+                form.action = '{!$Page.ItauBoletoPDF}';
+
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'barcodeImage';
+                input.value = dataUrl;
+                form.appendChild(input);
+
+                document.body.appendChild(form);
+                form.submit();
+                document.body.removeChild(form);
+            }
+        </script>
+    </head>
+
+    <body onload="generateBarcode();">
+        <img id="barcodeImage" alt="Barcode" style="display:none;" />
+    </body>
+</apex:page>

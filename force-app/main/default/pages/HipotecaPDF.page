@@ -1,0 +1,183 @@
+<!-- /**
+ * @author   : Matheus de Castro Sousa
+ * @since    : 2022-03-13
+ * Porpouse  : Estrutura do pdf contrato de Hipoteca no Visualforce Page
+ */ -->
+<apex:page standardController="Contrato_opus__c" extensions="HipotecaPDFController" showHeader="false" sidebar="false" standardStylesheets="false"
+    renderAs="pdf" applyHtmlTag="false" applyBodyTag="false">
+    <html>
+
+    <head>
+        <style type="text/CSS">
+            @page { size:A4; @bottom-center { content: element(footer) "Página " counter(page) " de " counter(pages) " Identificador Único: {!contratoName}"; 
+             }  } div.footer { position: running(footer); }
+
+        </style>
+    </head>
+
+    <body>
+        <div class="footer">
+            <table style='font-family:Calibri !important; width: 90%;'>
+                <tr>
+                    <th class="centered padding-baixo" style='border-width: thin; border-style: solid;'>Vendedor 1</th>
+                    <th class="centered padding-baixo" style='border-width: thin; border-style: solid;'>Vendedor 2</th>
+                    <th class="centered padding-baixo" style='border-width: thin; border-style: solid;'>Comprador 1</th>
+                    <th class="centered padding-baixo" style='border-width: thin; border-style: solid;'>Comprador 2</th>
+                    <th class="centered padding-baixo" style='border-width: thin; border-style: solid;'>Testemunha 1</th>
+                    <th class="centered padding-baixo" style='border-width: thin; border-style: solid;'>Testemunha 2</th>
+                </tr>
+            </table>
+        </div>
+            <br/>
+            <br/>
+            <br/>
+        <table style="font-family:Calibri !important; margin-left: 23%;padding-bottom: 5rem;">
+            <th>NOTIFICAÇÃO AOS ADQUIRENTES - HIPOTECA</th>
+        </table>
+
+        <p style='margin-left: 90%;'>
+            <b>
+                <apex:image id="img" url="{!$Resource.IMG_Hipoteca}" width="70" height="70" />
+            </b>
+        </p>
+
+        <p style='font-family:Calibri !important;'>Goiânia,______ de__________________de__________</p>
+
+        <table style="font-family:Calibri !important; padding-bottom:15px; padding-top:15px">
+            <tr>
+                <th>UNIDADE:</th>
+
+                <td style="text-align:left;">
+                    <apex:outputLabel value="{!unidade}" />
+                </td>
+            </tr>
+            <tr>
+                <th>VAGAS:</th>
+
+                <td style="text-align:left;">
+                    <apex:outputLabel value="{!garagem}" />
+                </td>
+            </tr>
+            <tr>
+                <th>EMPREENDIMENTO:</th>
+
+                <td style="text-align:left;">
+                    <apex:outputLabel value="{!empreendimento}" />
+                </td>
+            </tr>
+            <tr>
+                <th>LOCALIZAÇÃO:</th>
+
+                <td style="text-align:left;">
+                    <apex:outputLabel value="{!localizacao}" />
+                </td>
+            </tr>
+            <tr>
+                <th>VENDEDORA:</th>
+
+                <td style="text-align:left;">
+                    <apex:outputLabel value="{!razaoSocial}" />
+                </td>
+            </tr>
+        </table>
+
+
+        <table style="font-family:Calibri !important; padding-bottom:20rem;">
+            <td >
+                <br/>
+                <p style="font-family:Calibri !important;padding-left: 5px">
+                <th>Prezado Sr.(a)
+                <apex:repeat value="{!proponentes}" var="proponent">
+                    <apex:panelGroup rendered="{!If((proponent.RecordTypeId=='0124A000001IuzJQAS'),true,false)}">
+                    <apex:outputLabel value="{!cliente}" />
+                    <apex:outputLabel value="{!conjugue}" />
+                    </apex:panelGroup>
+                    <apex:panelGroup rendered="{!If((proponent.RecordTypeId=='0124A000001IuzOQAS'),true,false)}">
+                    <apex:outputLabel value="{!proponent.Raz_o_Social__c}" />
+                    </apex:panelGroup>
+                </apex:repeat>
+                </th>
+                <br/>
+                    Comunicamos que o Itaú Unibanco S.A. e
+                    <strong>
+                        <apex:repeat value="{!razaoSocial}" var="props">
+                            {!props}
+                        </apex:repeat>
+                    </strong> a celebraram contrato de financiamento para construção do empreendimento
+                    <strong>
+                        <apex:outputLabel id="empree" value="{!empreendimento}" />
+                    </strong>
+                    do qual você adquiriu a unidade
+                    <strong>
+                        <apex:outputLabel value="{!unidade}" />
+                    </strong>.<br/>
+                    Visando garantir o crédito concedido, a sua unidade e todas as outras unidades deste empreendimento foram dadas em garantia
+                    ao Itaú Unibanco.<br/>
+                    Importante ressaltarmos que referida operação de crédito não altera em nada as condições pactuadas entre você e a
+                    <strong>
+                        <apex:outputLabel value="{!razaoSocial}" />
+                    </strong> previstas no seu compromisso.<br/>
+                    Em caso de dúvidas ou para mais informações, entre em contato com a
+                    <strong>
+                        <apex:outputLabel value="{!razaoSocial}" />
+                    </strong> .<br/>
+                    Atenciosamente.
+                </p>
+            </td>
+        </table>
+
+        <table style="font-family:Calibri !important; margin-left: 40%;">
+            <th>DEVEDORAS</th>
+        </table>
+
+        <table style="font-family:Calibri !important;">
+            <th>CLIENTE</th>
+        </table>
+
+        <table style="font-family:Calibri !important; padding-left:200px;">
+            <strong>
+                <apex:repeat value="{!proponentes}" var="proponent">
+                    <apex:panelGroup rendered="{!If((proponent.Name!=null &&  proponent.RecordTypeId=='0124A000001IuzJQAS'),true,false)}">
+                    <th style="font-family:Calibri !important; padding-left:200px;">
+                        <br/>
+                        <br/> ________________________________
+                    </th>
+                    <br/>
+                    <th style="font-family:Calibri !important; padding-left:200px;">
+                        {!proponent.Name}</th>
+                    </apex:panelGroup>
+                    <br/>
+                    <apex:panelGroup rendered="{!If((proponent.Nome_Completo_CJ__c!=null &&  proponent.RecordTypeId=='0124A000001IuzJQAS'),true,false)}">
+                        <br/>
+                        <th style="font-family:Calibri !important; padding-left:200px;">
+                            ________________________________</th>
+                        <br/>
+                        <th style="font-family:Calibri !important; padding-left:200px;">
+                            {!proponent.Nome_Completo_CJ__c}</th>
+
+                        <br/>
+                    </apex:panelGroup>
+                    <apex:panelGroup rendered="{!If(( proponent.RecordTypeId=='0124A000001IuzOQAS'),true,false)}">
+                        <br/>
+                        <th style="font-family:Calibri !important; padding-left:200px;">
+                            ________________________________</th>
+                        <br/>
+                        <th style="font-family:Calibri !important; padding-left:200px;">
+                            {!proponent.Raz_o_Social__c}</th>
+
+                        <br/>
+                    </apex:panelGroup>
+                </apex:repeat>
+            </strong>
+        </table>
+
+
+
+        
+
+
+    </body>
+
+    </html>
+
+</apex:page>

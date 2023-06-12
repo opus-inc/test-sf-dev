@@ -1,0 +1,9 @@
+:host .slds-modal__header {
+    border-bottom: none;
+    padding: 0;
+}
+.searchBox{
+    width: 40%;
+    display: inline-block;
+    padding-right: 15px;
+}

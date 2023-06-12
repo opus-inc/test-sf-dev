@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>54.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__Tab</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <masterLabel>Navigation Menu</masterLabel>
+    <description>Let users to see and choose a page.</description>
+
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="itens" type="String" default="false" label="Pages to show in the menu" description="" />
+            
+        </targetConfig>
+
+        <targetConfig targets="lightning__RecordPage">
+            <property name="itens" type="String" default="false" label="Pages to show in the menu" description="" />
+            
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

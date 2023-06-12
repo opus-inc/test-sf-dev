@@ -1,0 +1,156 @@
+<template>
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_3-of-4">
+            <div class="slds-card" style="padding:20px;padding-top:10px;width: 100%; margin:auto;height: 233px;">
+                <span style="font-size:22px;font-weight: bold">Comparativo Tabela X Proposta</span>
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col slds-size_1-of-3">
+                        <br><span style="font-weight: bold">Tabela</span>
+                        <br><span style="">Valor: </span> <span if:true={propostaVenda} style="">
+                            <lightning-formatted-number value={propostaVenda.Valor_Tabela__c} format-style="currency"
+                                currency-code="BRL" maximum-fraction-digits="2"></lightning-formatted-number>
+                        </span>
+                        <br><span style="">VPL: </span> <span if:true={propostaVenda} style="">
+                            <lightning-formatted-number value={propostaVenda.VPL_Tabela__c} format-style="currency"
+                                currency-code="BRL" maximum-fraction-digits="2"></lightning-formatted-number>
+                        </span>
+                        <br><span style="">Valor m²: </span> <span if:true={propostaVenda} style="">
+                            <lightning-formatted-number value={propostaVenda.Valor_M2_Tabela__c} format-style="currency"
+                                currency-code="BRL" maximum-fraction-digits="2"></lightning-formatted-number>
+                        </span>
+                        <br><span style="">Data da Tabela: </span> <span if:true={propostaVenda} style="">{dataTabela}</span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <br><span style="font-weight: bold">Proposta</span>
+                        <br><span style="">Valor: </span> <span if:true={propostaVenda} style="">
+                            <lightning-formatted-number value={propostaVenda.Valor_da_Proposta__c}
+                                format-style="currency" currency-code="BRL" maximum-fraction-digits="2">
+                            </lightning-formatted-number>
+                        </span>
+                        <br><span style="">VPL: </span> <span if:true={propostaVenda} style="">
+                            <lightning-formatted-number value={propostaVenda.VPL_Proposta__c} format-style="currency"
+                                currency-code="BRL" maximum-fraction-digits="2"></lightning-formatted-number>
+                        </span>
+                        <br><span style="">Valor m²: </span> <span if:true={propostaVenda} style="">
+                            <lightning-formatted-number value={propostaVenda.Valor_M2__c} format-style="currency"
+                                currency-code="BRL" maximum-fraction-digits="2"></lightning-formatted-number>
+                        </span>
+                        <br><span style="">Data da Proposta: </span> <span if:true={propostaVenda} style="">{dataProposta}</span>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-3">
+                        <br><span style="font-weight: bold">Variação</span>
+
+                        <br><span style="">Valor Nominal: </span> <span if:true={propostaVenda} style="">
+                            <lightning-formatted-number value={propostaVenda.Variacao_Nominal__c}
+                                format-style="currency" currency-code="BRL" maximum-fraction-digits="2">
+                            </lightning-formatted-number>
+                        </span>
+
+                        <br><span style="">% Nominal: </span> {propostaVenda.Pecentual_Variacao_Nominal__c}%<span
+                            if:true={propostaVenda} style=""></span>
+
+                        <br><span style="">Valor VPL: </span><span if:true={propostaVenda} style="">
+                            <lightning-formatted-number value={propostaVenda.Variacao_VPL__c} format-style="currency"
+                                currency-code="BRL" maximum-fraction-digits="2"></lightning-formatted-number>
+                        </span>
+
+                        <br><span style="">% VPL: </span> {propostaVenda.Percentual_Variacao_VPL__c}% <span
+                            if:true={propostaVenda} style="">
+                            <lightning-formatted-date-time value={propostaVenda}></lightning-formatted-date-time>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-4">
+            <div class="slds-card" style="padding:20px;padding-top:10px;width: 100%; margin:auto;height: 233px;">
+
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col slds-size_9-of-12">
+                        <span style="font-size:22px;font-weight: bold">Comentários e clausulas</span>
+                    </div>
+                    <div class="slds-col slds-size_3-of-12">
+                        <lightning-button label="Editar" variant="destructive-text" slot="actions"
+                            onclick={openCommentaryModal} disabled={disableFaseProp}> </lightning-button>
+                    </div>
+                </div>
+                <div class="slds-grid slds-gutters">
+                    <div if:true={propostaVenda} class="slds-col slds-size_1-of-1"
+                        style="overflow-wrap: break-word;width:400px;height:130px;overflow-y: scroll">
+                        {propostaVenda.Comentarios_e_Clausulas__c}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slds-text-align_right" style="    margin-right: 10px;padding-top: 15px;">
+        <lightning-button style="margin-right:10px" variant="destructive" onclick={handleOpenEnviarProposta}
+            label="Enviar para validação" disabled={disableNotAprovFase}></lightning-button>
+        <lightning-button variant="destructive" onclick={handleOpenAprovarProposta} label="Validar proposta"
+            disabled={disableAprovFase}>
+        </lightning-button>
+    </div>
+
+    <template if:true={isOpenModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={closeCommentaryModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                            size="small">
+                        </lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Comentários e Clausulas
+                    </h2>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning-card title="">
+                        <lightning-textarea label='' value={propostaVenda.Comentarios_e_Clausulas__c}
+                            onchange={inputHandleChange}></lightning-textarea>
+                    </lightning-card>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={closeCommentaryModal}
+                        title="Cancelar">Cancelar</button>
+                    <button class="slds-button slds-button_brand" onclick={handleSaveEdit}
+                        title="Salvar">Salvar</button>
+                </footer>
+                <div if:true={isLoadingModal} class="spinner">
+                    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <template if:true={showToastBar}>
+        <div class="slds-notify_container">
+            <div class={outerClass} role="status">
+                <span class="slds-assistive-text">{type}</span>
+                <span class={innerClass} title={message}>
+                    <lightning-icon icon-name={getIconName} alternative-text="icon"
+                        styleclass="slds-icon slds-icon_small" variant="inverse" size="small"></lightning-icon>
+                </span>
+                <div class="slds-notify__content">
+                    <h2 class="slds-text-heading_small">{message}</h2>
+                </div>
+                <div class="slds-notify__close">
+                    <lightning-button-icon icon-name="utility:close" size="small" variant="border-filled"
+                        class="slds-button slds-button_icon slds-button_icon-inverse" alternative-text="next"
+                        onclick={closeModalToast}></lightning-button-icon>
+                </div>
+            </div>
+        </div>
+    </template>
+    <div if:true={isLoadingProposta} class="spinner">
+        <lightning-spinner alternative-text="Loadinggg" size="medium"></lightning-spinner>
+    </div>
+    <c-popup-enviar-proposta proposta-venda-id={propostaVendaId}></c-popup-enviar-proposta>
+    <c-popup-aprovar-proposta proposta-venda-id={propostaVendaId}></c-popup-aprovar-proposta>
+</template>

@@ -1,0 +1,130 @@
+<template>
+    
+    <div class="slds-card boxTable" style="padding:20px;width: 100%;">
+        <div class="boxFacaSim">
+            <span class="slds-text-align_left fontFacaSim">Condição Padrão</span>
+        </div>
+    
+        <lightning-datatable key-field="id" columns={columns} data={tabCondicoes} hide-checkbox-column>
+        </lightning-datatable>
+    </div>
+
+    <div class="slds-card" style="padding:20px;width: 100%; margin:auto;">
+
+        <div class="boxFacaSim">
+            <span class="slds-text-align_left fontFacaSim">Faça sua simulação</span>
+    
+            <div class="slds-text-align_right" style="margin-right: 10px;">
+                <lightning-button style="margin-right: 5px;" variant="destructive-text" label="Pagar conforme tabela"
+                onclick={pagarConformeTabela} disabled={disableFaseProp}>
+               </lightning-button>
+                
+               <lightning-button style="margin-right: 5px;" variant="destructive-text" label="Pagar à vista"
+                   onclick={pagarAVista} disabled={disableFaseProp}>
+                </lightning-button>
+
+                   <lightning-button style="margin-right: 5px;" variant="destructive-text" label="Aplicar desconto"
+                   onclick={openModalDiscount} disabled={disableFaseProp}>
+                </lightning-button>
+                
+                <lightning-button style="margin-right: 5px;" variant="destructive-text" label="Comissão"
+                    onclick={openModalComissao} disabled={disableFaseProp}>
+                </lightning-button>
+    
+            </div>
+        </div>
+
+        <span style="color:red">*Adicione no máximo, 9 séries de pagamentos na sua proposta</span>
+
+        <template if:true={hasRow}>
+            <div class="slds-grid slds-gutters" style="height:50px; background-color: #f3f3f3;">
+                <div class="slds-col slds-size_2-of-12 header-input">
+                    <strong>Periodicidade</strong>
+                </div>
+                <div class="slds-col slds-size_2-of-12 header-input">
+                   <strong> N° de parcelas</strong>
+                </div>
+                <div class="slds-col slds-size_2-of-12 header-input">
+                    <strong>Início do vencimento</strong>
+                </div>
+                <div class="slds-col slds-size_2-of-12 header-input">
+                    <strong> Valor das parcelas</strong>
+                </div>
+                <div class="slds-col slds-size_2-of-12 header-input">
+                    <strong>Valor total</strong>
+                </div>
+                <div class="slds-col slds-size_2-of-12 header-input">
+                    <strong> Correção</strong>
+                </div>
+                <div class="slds-col slds-size_1-of-12 header-input">
+                    <span></span>
+                </div>
+            </div>
+        </template>
+
+        <template for:each={rows} for:item="row" for:index="rowIndex">
+            <div key={row} class="slds-grid slds-gutters" style="height:50px;">
+                <div class="slds-col slds-size_1-of-6 columnStyle">
+                    <lightning-combobox data-index={rowIndex} style="width:100%;" name="periodicidade" label=""
+                        value={row.Periodicidade_Condicao__c} placeholder="Periodicidade" options={periodicidadeOptions}
+                        onchange={handleChangePeriodicidade} required variant="label-hidden"></lightning-combobox>
+                </div>
+                <div class="slds-col slds-size_1-of-6 columnStyle">
+                    <lightning-input type="number" data-index={rowIndex} data-field="Quantidade_de_parcelas__c"
+                        value={row.Quantidade_de_parcelas__c} placeholder="N° de parcelas" label="" min="1"
+                        onchange={handleChangeParcelas} class="validate" required variant="label-hidden"></lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-6 columnStyle">
+                    <lightning-input type="date" data-index={rowIndex} data-field="In_cio_do_Vencimento__c"
+                        value={row.In_cio_do_Vencimento__c} placeholder="Inicio do vencimento" label=""
+                        onchange={inputHandleChange} date-style="short" min={dateToday} 
+                        message-when-range-underflow="A data do inicio de vencimento não pode ser menor que hoje."
+                        class="validate" required variant="label-hidden"></lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-6 columnStyle">
+                    <lightning-input type="number" data-index={rowIndex} data-field="Valor_Total_das_Parcelas__c" 
+                            onchange={inputHandleChange} placeholder="Valor das parcelas" label=""
+                            value={row.Valor_Total_das_Parcelas__c}  formatter="currency" step="0.01" min="1"
+                            class="validate" required variant="label-hidden">
+                    </lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-6 columnStyle">
+                    <p><lightning-formatted-number value={row.valorTotal} format-style="currency" currency-code="BRL"></lightning-formatted-number></p>
+                </div>
+                <div class="slds-col slds-size_1-of-6 columnStyle">
+                    <span>{row.correcao}</span>
+                </div>
+                <div class="slds-col slds-size_1-of-6 columnStyle">
+                    <lightning-button-icon icon-name="utility:dash" alternative-text="Remove"
+                        class="slds-align-bottom remove-button colorIcon" size="small" onclick={handleDeleteRow}
+                        data-index={rowIndex}>
+                    </lightning-button-icon>
+                </div>
+            </div>
+        </template>
+
+        <div>
+            <div class="slds-text-align_left valorTotalProposta">
+                Valor total da proposta: <lightning-formatted-number value={valorIntegralProp} format-style="currency" currency-code="BRL"></lightning-formatted-number>
+            </div>
+
+            <div class="slds-text-align_right saveCondBox">
+                <lightning-button variant="destructive" disabled={disableFaseProp} label="Salvar e Atualizar VPL"
+                    onclick={handleSave} style="padding-right: 60px;"></lightning-button>
+
+                <lightning-button variant="destructive" style="padding: 1rem;"  label="Adicionar Condições"
+                    onclick={handleAddRow} size="small" class="add-button colorIcon">
+                </lightning-button>
+            </div>
+        </div>
+
+    </div>
+
+    <div if:true={isLoading} class="spinner">
+        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+    </div>
+
+    <c-popup-aplicar-desconto proposta-venda-option={paymentConditions}></c-popup-aplicar-desconto>
+    <c-popup-comissao proposta-venda-id={propostaVendaId}></c-popup-comissao>
+
+</template>

@@ -1,0 +1,283 @@
+<template>
+    <div class="slds-page-header">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-custom-custom24" title="Proposta de Venda">
+                            <svg class="slds-icon slds-page-header__icon" aria-hidden="true">
+                                <use xlink:href="/assets/icons/custom-sprite/svg/symbols.svg#custom24">teste0</use>
+                            </svg>
+                            <span class="slds-assistive-text">custom24</span>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h3>
+                                    <p class="slds-page-header__name-meta">Proposta de Venda</p>
+                                </h3>
+                                <h1>
+                                    <span class="slds-page-header__title slds-truncate" title=""
+                                        if:true={propostaVenda}>{propostaVenda.Name}</span>
+                                </h1>
+                            </div>
+                            <div class="slds-page-header__name-title only-print">
+                                <h3>
+                                    <p class="slds-page-header__name-meta">Status da Proposta</p>
+                                </h3>
+                                <h1>
+                                    <span class="slds-page-header__title slds-truncate" title="" if:true={propostaVenda}>{faseProposta}</span>
+                                </h1>
+                            </div>
+                        </div>
+                        <div class="slds-text-align_right botao" style="float: right;padding-top: 10px;">
+                            <lightning-button variant="destructive" onclick={handleOpenChangeUnidade}
+                                label="Mudar Unidade" disabled={disableChangeUnidade}>
+                            </lightning-button>
+                            <lightning-button if:true={corretorMaster}  style="margin-left:10px" variant="destructive" onclick={handleOpenChangeCorretor}
+                                label="Mudar Corretor" disabled={disableChangeCorretor}>
+                            </lightning-button>
+                            <lightning-button style="margin-left:10px" variant="destructive" onclick={handleOpenProponente} label="Proponente"
+                                disabled={disablePropInterFase}>
+                            </lightning-button>
+                            <lightning-button style="margin-left:10px" variant="destructive"
+                                onclick={handleOpenIntermediacao} label="Intermediação" disabled={disablePropInterFase}>
+                            </lightning-button>
+                            <lightning-button style="margin-left:10px" variant="destructive"
+                                onclick={imprimir} label="Imprimir" >
+                            </lightning-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slds-path current-stage" style="margin-top:10px;margin-bottom: 10px;">
+        <div class="slds-grid slds-path__track">
+            <div class="slds-grid slds-path__scroller-container">
+                <div class="slds-path__scroller">
+                    <div class="slds-path__scroller_inner">
+                        <ul class="slds-path__nav" role="listbox" aria-orientation="horizontal">
+                            <template for:each={fasesPicklist} for:item="fase">
+                                <li key={fase.value} class={fase.pathClass} role="presentation" id={fase.value}
+                                    fase={fase.value}>
+                                    <a aria-selected="true" class="slds-path__link" id={fase.value} role="option"
+                                        tabindex="0">
+                                        <span class="slds-path__stage">
+                                            <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+                                                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#check">
+                                                </use>
+                                            </svg>
+                                            <span class="slds-assistive-text">Current Stage:</span>
+                                        </span>
+                                        <span class="slds-path__title">{fase.label}</span>
+                                    </a>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters detalhes-da-proposta" style="background-color: rgb(250 250 250);padding-top: 20px;">
+        <div class="slds-col slds-size_2-of-3">
+            <!-- <lightning-card title="" style="width: 100%;"> -->
+            <div style="width: 100%;">
+                <div class="slds-grid slds-gutters" style="margin: 0;">
+                    <div class="slds-col slds-size_3-of-12">
+                        <template if:true={empreendimentoImages}>
+                            <div style="display: flex;justify-content: center;">
+                                <template for:each={empreendimentoImages} for:item="image" >
+                                    <img key={image.Id} src={image.url} style="height: 150px;">
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+
+                    <div class="slds-col slds-size_4-of-12">
+                        <div if:true={propostaVenda} style="margin-left:20px; line-height: 2;">
+                            <strong>{propostaVenda.Nome_do_Empreendimento__c}</strong>
+
+                            <br><strong>Unidades: </strong>
+                            <template for:each={unidadesProposta} for:item="unidade">
+                                {unidade.Unidade__r.Name};
+                            </template>
+
+                            <br><strong>Garagens: </strong>
+                            <template for:each={garagensProposta} for:item="garagem">
+                                {garagem.Unidade__r.Name};
+                            </template>
+
+                            <div if:true={hasItemAdicional} style="display: contents;">
+                                <br><strong>Itens Adicionais: </strong>
+                                <template for:each={itensAdicionaisProposta} for:item="item">
+                                    {item.Item_Adicional__r.Name};
+                                </template>
+                            </div>
+                            
+                            <br><strong>Área: </strong>{propostaVenda.Area_Privativa__c}
+                            <br><strong>Data de Entrega: </strong><lightning-formatted-date-time value={propostaVenda.Data_de_Entrega_do_Empreendimento__c} year="numeric" month="numeric" day="numeric" time-zone="UTC" ></lightning-formatted-date-time>
+                            <br><strong>Meses até Entrega: </strong>{propostaVenda.mesesEntrega}
+
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_5-of-12">
+                        <div class="dados-cliente">
+                            <div class="botao">
+                                <lightning-button label="Editar" variant="destructive-text" slot="actions" onclick={openEditCustomerModal}
+                                    disabled={disableFaseProp}>
+                                </lightning-button>
+                        
+                            </div>
+                        
+                            <div style="min-height: 150px;line-height: 2;">
+                                <strong>Nome do Cliente: </strong><span if:true={propostaVenda}>{propostaVenda.Nome_do_Cliente__c}</span>
+                                <br><strong style="margin-top: 1px;">CPF: </strong><span
+                                    if:true={propostaVenda}>{propostaVenda.CPF_do_Cliente__c}</span>
+                                <br><strong style="margin-top: 1px;">E-mail: </strong><span
+                                    if:true={propostaVenda}>{propostaVenda.E_mail_do_Cliente__c}</span>
+                                <br><strong style="margin-top: 1px;">Telefone: </strong><span
+                                    if:true={propostaVenda}>{propostaVenda.Telefone_do_Cliente__c}</span>
+                                <br><strong style="margin-top: 1px;">Pasta Facilita: </strong>
+                                    <span if:true={propostaVenda.Numero_pasta_Facilita__c}>
+                                        <a href={linkPastaFacilita} target="_blank">{propostaVenda.Numero_pasta_Facilita__c}</a>
+                                    </span>
+                                <br><strong style="margin-top: 1px;">Observação: </strong><span
+                                    if:true={propostaVenda}>{propostaVenda.Observacao_do_Cliente__c}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- </lightning-card> -->
+        </div>
+
+        <div class="slds-col slds-size_1-of-3 comentarios-clausulas">
+            <div style="width: 100%; overflow-wrap: break-word;padding: 0px 20px;">
+            <!-- <lightning-card style="width: 100%; overflow-wrap: break-word;"> -->
+                <!-- <div class="slds-card" style="height: 200px;padding: 0px 20px;"> -->
+                
+                    <div class="slds-grid slds-gutters" style="margin: 0px;display: flex;justify-content: space-between;">
+                            <span style="font-size:22px;font-weight: bold">Comentários e clausulas</span>
+                            <div class="botao">
+                                <lightning-button label="Editar" variant="destructive-text" slot="actions" onclick={openCommentaryModal}
+                                    disabled={disableFaseProp}> </lightning-button>
+                            </div>
+                    </div>
+                    <div class="slds-grid slds-gutters" style="margin: 20px 0;">
+                        <div if:true={propostaVenda} class="slds-col slds-size_1-of-1"
+                            style="overflow-wrap: break-word;;overflow-y: scroll; height: 100px;">
+                            {propostaVenda.Comentarios_e_Clausulas__c}
+                        </div>
+                    </div>
+                <!-- </div> -->
+
+            <!-- </lightning-card> -->
+            </div>
+        </div>
+        <div if:true={isLoaded} class="spinner">
+            <lightning-spinner alternative-text="Loadingg" size="medium"></lightning-spinner>
+        </div>
+    </div>
+
+    <template if:true={isOpenCommentsModal}>
+        <section role="dialog" tabindex="-1" aria-modal="true"
+             class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+    
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close"
+                        onclick={closeCommentaryModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small">
+                        </lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 class="slds-text-heading_medium slds-hyphenate">Comentários e Clausulas</h2>
+                </header>
+    
+                <div class="slds-modal__content slds-p-around_medium">
+                    <lightning-card title="">
+                        <lightning-textarea label='' value={propostaVenda.Comentarios_e_Clausulas__c}
+                            onchange={comparativeValuesInputHandleChange}></lightning-textarea>
+                    </lightning-card>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={closeCommentaryModal}
+                        title="Cancelar">Cancelar</button>
+                    <button class="slds-button slds-button_brand" onclick={handleSaveEditCommentary} title="Salvar">Salvar</button>
+                </footer>
+                <div if:true={isLoadingModal} class="spinner">
+                    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <template if:true={isCustomerModalOpen}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={closeEditCustomerModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                            size="small">
+                        </lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Dados do Cliente</h2>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning-card title="">
+                        <lightning-input type='text' label='Nome' value={propostaVenda.Nome_do_Cliente__c}
+                            data-field="Nome_do_Cliente__c" onchange={inputHandleChange}></lightning-input>
+
+                        <span onkeypress={keyCheckOnlyNumber}>
+                            <lightning-input type='text' label='CPF' value={propostaVenda.CPF_do_Cliente__c}
+                                data-field="CPF_do_Cliente__c" onchange={inputHandleChange}></lightning-input>
+                        </span>
+
+                        <lightning-input type='text' label='E-mail' value={propostaVenda.E_mail_do_Cliente__c}
+                            data-field="E_mail_do_Cliente__c" onchange={inputHandleChange}></lightning-input>
+
+                        <span onkeypress={keyCheckOnlyNumber}>
+                            <lightning-input type='text' label='Telefone' value={propostaVenda.Telefone_do_Cliente__c}
+                                data-field="Telefone_do_Cliente__c" onchange={inputHandleChange}></lightning-input>
+                        </span>
+
+                        <lightning-input type='text' label='Pasta Facilita'
+                            value={propostaVenda.Numero_pasta_Facilita__c} data-field="Numero_pasta_Facilita__c"
+                            onchange={inputHandleChange}></lightning-input>
+
+                        <lightning-input type='text' label='Observação' value={propostaVenda.Observacao_do_Cliente__c}
+                            data-field="Observacao_do_Cliente__c" onchange={inputHandleChange}></lightning-input>
+                    </lightning-card>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={closeEditCustomerModal}
+                        title="Cancelar">Cancelar</button>
+                    <button class="slds-button slds-button_brand" onclick={handleSaveEdit}
+                        title="Salvar">Salvar</button>
+                </footer>
+                <div if:true={isLoading} class="spinner">
+                    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <div if:true={isLoadingProposta} class="spinner">
+        <lightning-spinner alternative-text="Loadinggg" size="medium"></lightning-spinner>
+    </div>
+    <c-popup-proponente proposta-venda-id={propostaVendaId}></c-popup-proponente>
+    <c-popup-intermediacao proposta-venda-id={propostaVendaId}></c-popup-intermediacao>
+    <c-popup-change-corretor proposta-venda-id={propostaVendaId}></c-popup-change-corretor>
+    <c-popup-change-property proposta-venda-id={propostaVendaId}></c-popup-change-property>
+</template>

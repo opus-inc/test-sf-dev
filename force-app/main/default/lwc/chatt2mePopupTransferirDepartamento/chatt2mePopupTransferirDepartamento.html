@@ -1,0 +1,28 @@
+<template>
+    <template if:true={showPopupTransferir}>
+        <div>
+            <div class="cover" onclick={closePopup}></div>
+            <lightning-card class="popupBox" title={label.titleTransferirDepart}>
+                <div class="header"></div>
+                <!-- Lista de numeros -->
+                <div class="radioList slds-card__body slds-media__body slds-scrollable">
+                    <lightning-radio-group name="radioGroup" options={options} value={value} type="radio"
+                        onchange={handlerChangeValue}> </lightning-radio-group>
+                </div>
+                <!-- Caixa de texto -->
+                <div class='boxMessage'>
+                    <lightning-textarea name="finishtext" onchange={handlerChangeText} value={message}>
+                    </lightning-textarea>
+                </div>
+                <!-- Footer com botoes -->
+                <div class="popupFooter" slot="footer">
+                    <lightning-button class="slds-m-right_small" variant="neutral" title={label.cancelLabel}
+                        label={label.cancelLabel} onclick={closePopup}></lightning-button>
+                    <lightning-button variant="brand" title={label.transferirLabel} label={label.transferirLabel}
+                        onclick={transferDepartament}>
+                    </lightning-button>
+                </div>
+            </lightning-card>
+        </div>
+    </template>
+</template>

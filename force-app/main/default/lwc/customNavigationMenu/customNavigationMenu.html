@@ -1,0 +1,18 @@
+<template>
+    <div class="slds-p-around_medium lgc-bg" style="display: flex;align-items: center;">  
+        <div style="flex:1;width: 130px;height: 50px;">
+            <img src={logoUrl} alt="logo">
+        </div>
+        <div>
+            
+        <template if:true={enabledMenu}>
+            <lightning-button-menu alternative-text="Show menu" icon-name='utility:rows' icon-size="large" onselect={handleMenuSelect} menu-alignment="right">                     
+                <template for:each={options} for:item="option">
+                    <lightning-menu-item style="font-size: 20px;" key={option.value} value={option.value} label={option.label}></lightning-menu-item>
+                </template>            
+            </lightning-button-menu>
+        </template>
+        
+        </div>
+    </div>
+</template>

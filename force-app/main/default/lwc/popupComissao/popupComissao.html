@@ -1,0 +1,111 @@
+<template>
+    <template if:true={showModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="max-width: 70rem;">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={viewModal}>
+                        <lightning-icon style="fill: white;" icon-name="utility:close" alternative-text="close"
+                            variant="inverse" size="small">
+                        </lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Comissão do Corretor</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-522" style="overflow:initial;">
+                    <template if:true={showToastBar}>
+                        <div class="slds-notify_container">
+                            <div class={outerClass} role="status">
+                                <span class="slds-assistive-text">{type}</span>
+                                <span class={innerClass} title={message}>
+                                    <lightning-icon icon-name={getIconName} alternative-text="icon" styleclass="slds-icon slds-icon_small"
+                                        variant="inverse" size="small"></lightning-icon>
+                                </span>
+                                <div class="slds-notify__content">
+                                    <h2 class="slds-text-heading_small">{message}</h2>
+                                </div>
+                                <div class="slds-notify__close">
+                                    <lightning-button-icon icon-name="utility:close" size="small" variant="border-filled"
+                                        class="slds-button slds-button_icon slds-button_icon-inverse" alternative-text="next"
+                                        onclick={closeModalToast}></lightning-button-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template if:true={showEdit}>
+                        <span if:true={cannotSendToValidation} style="color:red;">Sinais da proposta não são suficientes para destacar a comissão<br></span>
+                        <lightning-input 
+                            type="number" 
+                            value={propostaVenda.Perc_Comissao_Faturada__c} 
+                            data-field="Perc_Comissao_Faturada__c"
+                            placeholder="Faturada" 
+                            label="Percentual Faturado (%)" 
+                            onchange={inputHandleChange}
+                            step="0.01"
+                        >
+                        </lightning-input>
+                        <lightning-input 
+                            type="number" 
+                            value={propostaVenda.Perc_Comissao_Destacada__c} 
+                            data-field="Perc_Comissao_Destacada__c"
+                            placeholder="Destacada" 
+                            label="Percentual Destacado (%)" 
+                            onchange={inputHandleChange}
+                            step="0.01"
+                        >
+                        </lightning-input>
+                        <lightning-input 
+                            type="number" 
+                            value={propostaVenda.Valor_da_Premiacao__c} 
+                            data-field="Valor_da_Premiacao__c"
+                            placeholder="Prêmio" 
+                            label="Valor Prêmio (R$)" 
+                            onchange={inputHandleChange}
+                            step="0.01"
+                        >
+                        </lightning-input>
+                    </template>
+                    <template if:false={showEdit}>
+                        <lightning-card title="" class="slds-text-align_center">
+                            <lightning-button label="Editar" variant="destructive-text" slot="actions" onclick={handleOpenEdit} disabled={canEdit}>
+                            </lightning-button>
+                            <span if:true={propostaVenda}>Faturado: {propostaVenda.Perc_Comissao_Faturada__c}% {valores.faturada}</span>
+                            <br><span if:true={propostaVenda}>Destacado: {propostaVenda.Perc_Comissao_Destacada__c}% {valores.destacada}</span>
+                            <br><span if:true={propostaVenda}>Valor Prêmio: {valores.premiacao}</span>
+                            <table if:true={condicoesSinalProposta} style="margin-top: 1rem;">
+                                <tr>
+                                    <th style="padding: 0 0.5rem;">Periodicidade</th>
+                                    <th style="padding: 0 0.5rem;">Início do Vencimento</th>
+                                    <th style="padding: 0 0.5rem;">Valor Total</th>
+                                    <th style="padding: 0 0.5rem;">Valor Opus</th>
+                                    <th style="padding: 0 0.5rem;">Valor Comissão</th>
+                                </tr>
+                                <template for:each={condicoesSinalProposta} for:item="row" for:index="rowIndex">
+                                    <tr key={row} data-index={rowIndex}>
+                                        <td style="padding: 0 0.5rem;">{row.Periodicidade_Condicao__c}</td>
+                                        <td style="padding: 0 0.5rem;">{row.In_cio_do_Vencimento__c}</td>
+                                        <td style="padding: 0 0.5rem;">{row.Valor_Total_das_Parcelas__c}</td>
+                                        <td style="padding: 0 0.5rem;">{row.Valor_Opus__c}</td>
+                                        <td style="padding: 0 0.5rem;">{row.Valor_Comissao__c}</td>
+                                    </tr>
+                                </template>
+                            </table>
+                        </lightning-card>
+                    </template>
+                </div>
+                <footer class="slds-modal__footer" style="text-align:center">
+                    <lightning-button variant="destructive-text" label="Fechar" style="margin-right:10px;"
+                    onclick={viewModal}></lightning-button>
+                    <lightning-button variant="destructive" onclick={handleSaveEdit} disabled={cannotSendToValidation}
+                    label="Salvar"></lightning-button>
+                </footer>
+               
+                <div if:true={isLoading} class="spinner">
+                    <lightning-spinner alternative-text="Loadinggg" size="medium"></lightning-spinner>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

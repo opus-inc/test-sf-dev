@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>57.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <propertyType name="T" extends="SObject" label="Input Type"
+                description="Generic sObject data type used for input sObject properties" />
+            <property
+                name="options" type="{T[]}" label="Lista de Opções"
+                description="Lista de Opções para seleção"
+                role="inputOnly" />
+
+            <property name="multiSelect" label="É multi-seleção?"
+                description="Informa se o componenente é multi-seleção?"
+                type="Boolean" role="inputOnly" />
+
+            <property name="labels" label="Campos usado para rótulo dos items"
+                description="Informa os campos que serão usados para montar o rótulo dos itens."
+                type="String" role="inputOnly" />
+
+            <property name="values" label="Campos usado para valores dos items"
+                description="Informa os campos que serão usados para montar o valor dos itens."
+                type="String" role="inputOnly" />
+
+            <property name="labelComponent" label="Rótulo" description="Rótulo do componente"
+                type="String" role="inputOnly" />
+
+            <property name="returnSelectedValue" label="Valor selecionado"
+                type="String" role="outputOnly" />
+
+            <property name="returnSelectedValues" label="Valores selecionados"
+                type="String" role="outputOnly" />
+
+
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

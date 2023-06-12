@@ -1,0 +1,49 @@
+<template>
+    <lightning-card  title="" class="slds-grid slds-grid_align-center">
+        <div class="slds-col slds-size_1-of-1">
+            <div style="width: 100%;position: relative;">
+                <div class="slds-p-around_medium lgc-bg">
+                    <span onkeypress={keyCheckOnlyNumber}>
+                        <lightning-input type="text" label="Corretor, informe seu CPF" value={cpf} onchange={handleInputCpf} required></lightning-input>
+                    </span>
+                    <span onkeypress={keyCheckOnlyNumber}>
+                        <lightning-input type="text" label="Caso possua um PIN, insira aqui" value={pin} onchange={handleInputPin}>
+                        </lightning-input>
+                    </span>
+                </div>
+                <div if:true={tokenEnviado}>
+                    <div class="slds-p-around_medium lgc-bg">
+                        <lightning-input type="text" label="Insira o token que foi enviado ao seu e-mail" value={token} onchange={handleInputToken} required></lightning-input>
+                    </div>
+                </div>
+                <div class="slds-p-around_medium lgc-bg" style="display: flex;align-items: center;">                    
+                    <lightning-button variant="destructive-text" style="flex:1;" label="Enviar token" onclick={handleClickToken}></lightning-button>                    
+                    <lightning-button variant="destructive-text" style="flex:1;" label="Autenticar com PIN" onclick={handleClickPinButton}></lightning-button>                    
+                    <div if:true={tokenEnviado}>
+                        <lightning-button variant="destructive" label="Avançar" onclick={handleClickNext}></lightning-button>                                    
+                    </div>
+                </div>            
+            </div>
+        </div>
+        
+    </lightning-card>
+    <div if:true={isLoaded} class="spinner">
+        <lightning-spinner alternative-text="Loadingg" size="medium"></lightning-spinner> 
+    </div> 
+    <template if:true={showToastBar}>
+        <div class="slds-notify_container">
+            <div class={outerClass} role="status">
+                <span class="slds-assistive-text">{type}</span> 
+                <span class={innerClass} title={message}>
+                    <lightning-icon icon-name={getIconName} alternative-text="icon" styleclass="slds-icon slds-icon_small" variant="inverse" size="small"></lightning-icon>
+                </span>
+                <div class="slds-notify__content">
+                    <h2 class="slds-text-heading_small">{message}</h2>
+                </div>
+                <div class="slds-notify__close">
+                    <lightning-button-icon icon-name="utility:close" size="small" variant="border-filled" class="slds-button slds-button_icon slds-button_icon-inverse" alternative-text="next" onclick={closeModel} ></lightning-button-icon>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>

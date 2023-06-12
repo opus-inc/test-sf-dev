@@ -1,0 +1,45 @@
+.boxFacaSim {
+    width: 100%;
+    min-height: 4rem;
+}
+.fontFacaSim {
+    font-size: 30px;
+    margin-left: 3rem;
+    color: #af0303;
+    float: left;
+}
+.columnStyle {
+    flex:1;
+    margin-bottom:4px;
+    align-items: center;
+    display: flex;
+}
+.add-button, .remove-button {
+    padding-bottom: 1px;
+    padding-right: 5px;
+    cursor: pointer;
+}
+.colorIcon {
+    --sds-c-icon-color-foreground-default: white;
+    --sds-c-icon-color-background: red;
+}
+.saveCondBox {
+    padding-top: 27px;
+    padding-right: 12rem;
+}
+.boxTable{
+    margin-bottom: 30px;
+}
+.valorTotalProposta {
+    float: left;
+    font-size: 22px;
+    padding-top: 35px;
+}
+
+.header-input { 
+    flex:1;
+    margin-top:2px;
+    margin-bottom:1px;
+    align-items: center;
+    display: flex;
+}

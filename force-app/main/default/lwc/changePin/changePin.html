@@ -1,0 +1,39 @@
+<template>
+    <div class="slds-card" style="padding: 20px;width: 70%;margin: auto;min-height: 170px;font-size: 1.2rem;">
+    
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_9-of-12" style="display: grid;">
+                <span>Nome: {corretor.Name}</span>
+                <span>CPF: {corretor.CPF__c}</span>
+                <span>Email: {corretor.Email__c}</span>
+            </div>
+            <div class="slds-col slds-size_3-of-12" style="display: grid;">
+                <span>PIN: {corretor.Pin__c}</span>
+                <lightning-button label="Gerar novo PIN" variant="destructive-text" slot="actions" onclick={handleGenerateNewPin}> </lightning-button>
+            </div>
+        </div>
+    </div>
+
+    <template if:true={showToastBar}>
+        <div class="slds-notify_container">
+            <div class={outerClass} role="status">
+                <span class="slds-assistive-text">{type}</span>
+                <span class={innerClass} title={message}>
+                    <lightning-icon icon-name={getIconName} alternative-text="icon" styleclass="slds-icon slds-icon_small"
+                        variant="inverse" size="small"></lightning-icon>
+                </span>
+                <div class="slds-notify__content">
+                    <h2 class="slds-text-heading_small">{message}</h2>
+                </div>
+                <div class="slds-notify__close">
+                    <lightning-button-icon icon-name="utility:close" size="small" variant="border-filled"
+                        class="slds-button slds-button_icon slds-button_icon-inverse" alternative-text="next"
+                        onclick={closeModalToast}></lightning-button-icon>
+                </div>
+            </div>
+        </div>
+    </template>
+    <div if:true={isLoading} class="spinner">
+        <lightning-spinner alternative-text="Loadinggg" size="medium"></lightning-spinner>
+    </div>
+</template>

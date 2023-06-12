@@ -1,0 +1,41 @@
+.dados-cliente {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    flex-direction: row-reverse;
+    padding: 0 20px;
+}
+
+.only-print {
+    display: none;
+}
+
+@media print {
+    
+    * {
+        zoom: 90%;
+    }
+
+    @page {
+        /* Chrome sets own margins, we change these printer settings */
+        margin: 0mm 0mm 0mm 0mm;
+        size: landscape;
+    }
+
+    .dados-cliente {
+        display: block;
+    }
+
+    .only-print {
+        display: block;
+        margin-left: 19rem;
+    }
+    
+    .current-stage {
+        display: none;
+    }
+
+    .botao {
+        display: none;
+    }
+}

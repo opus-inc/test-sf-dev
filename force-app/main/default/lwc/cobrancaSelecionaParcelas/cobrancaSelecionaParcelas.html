@@ -1,0 +1,6 @@
+<template>
+    <span style="font-size:22px;font-weight: bold">Parcelas</span>
+    <template if:true={hasParcelas} for:each={parcelas} for:item="row" for:index="rowIndex">
+        <span key={row.Id}>{row.Name}<br /></span>
+    </template>
+</template>

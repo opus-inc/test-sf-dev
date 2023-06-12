@@ -1,0 +1,13 @@
+.imgStyle{
+    height: 340px; 
+    width: 600px; 
+    padding: 15px; 
+    max-height: 25rem;
+}
+.empreendData{
+    width:60%;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+}
+.removeButton{
+    margin-left: 10px;
+}

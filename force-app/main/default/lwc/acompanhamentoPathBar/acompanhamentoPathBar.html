@@ -1,0 +1,67 @@
+<template>
+    <lightning-card>
+        <div class="slds-grid slds-grid_vertical">
+            <div class="slds-path" role="application">
+                <ul class="slds-path__nav" role="listbox" aria-orientation="horizontal">
+                    <template for:each={statuses} for:item="status">
+                        <li key={status.id} class={status.classNames} onclick={handlePathClick} data-id={status.id}>
+                            <span class="slds-path__link" role="option" tabindex="0" id={status.id}>
+                                <span class="complete slds-path__stage">
+                                    <lightning-icon icon-name="utility:check"
+                                        class="checkmark slds-icon-utility-check slds-icon_container"
+                                        alternative-text="Concluído" size="xx-small" variant="inverse"></lightning-icon>
+                                </span>
+                                <span class="slds-path__title">
+                                    {status.name}
+                                </span>
+                            </span>
+                        </li>
+                    </template>
+                </ul>
+            </div>
+            <template if:true={showDetails}>
+                <template if:true={currentShowingStep}>
+                    <lightning-card>
+                        <template for:each={currentShowingStep.subscribers} for:item="subscriber">
+                            <dl key={subscriber.id} class="slds-dl_horizontal" style="padding: 0em 2em;">
+                                <lightning-card title={subscriber.name}>
+                                    <dl class="slds-dl_horizontal">
+
+                                        <dt class="slds-dl_horizontal__label">
+                                            <p class="slds-truncate">Status:</p>
+                                        </dt>
+                                        <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                                            <p class="slds-truncate">{subscriber.status}</p>
+                                        </dd>
+                                        <template if:true={subscriber.subscriptionDate}>
+                                            <dt class="slds-dl_horizontal__label">
+                                                <p class="slds-truncate">Data de Assinatura:</p>
+                                            </dt>
+                                            <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                                                <p class="slds-truncate">{subscriber.subscriptionDate}</p>
+                                            </dd>
+                                        </template>
+                                    </dl>
+
+                                </lightning-card>
+
+                            </dl>
+                        </template>
+                    </lightning-card>
+                </template>
+            </template>
+        </div>
+        <header class="slds-card__header slds-grid">
+            <div class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__body slds-truncate">
+                    <h2><span class="slds-text-heading_small">
+                            <slot name="title"></slot>
+                        </span></h2>
+                </div>
+            </div>
+            <div class="slds-no-flex">
+                <slot name="actions"></slot>
+            </div>
+        </header>
+    </lightning-card>
+</template>
